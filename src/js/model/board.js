@@ -14,3 +14,6 @@ export class Board  {
             }
     }
 }
+
+const board = new Board();
+board.show();

@@ -8,7 +8,7 @@
     "test": "jest"
   },
   "keywords": [],
-  "author": "Ryan McGuinness",
+  "author": "Heather Jackson",
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/core": "^7.22.20",

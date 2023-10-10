@@ -15,19 +15,59 @@
 /**
  * The Die class represents the idea of a single dice (die) that may have four or more sides.
  */
+
+import { SummedRoll } from "./summed_roll.js";
+
+const minSides = 4;
+
 export class Die {
-  #Sides = -1;
+  #Sides;
+
   constructor(sides) {
-    this.#Sides = sides;
+    this.#Sides = (sides >= minSides) ? sides : console.log("sides must be greater than or equal to 4");
   }
+
   // Should return a number of sides
   get sides() {
-    // TODO - implement the sides method
-    throw new Error("Method not implemented.");
+    return this.#Sides;
   }
+
   // Should return a random number between one and the total sides
   roll() {
-    // TODO - implement the roll method
-    throw new Error("Method not implemented.");
+    return Math.floor(Math.random() * this.#Sides) + 1;
   }
+
+  sumOfRolls(numberOfRolls) {
+    const array = [];
+    for (let i = 0; i < numberOfRolls; i++) {
+        array.push(this.roll());
+    }
+    
+    const summedRolls = new SummedRoll(array);
+    console.log(summedRolls.numbers);
+    console.log(summedRolls.sum);
+
+    return summedRolls.sum; 
+  }
+
+  sumOfRollsAndNumberOfDice(numberOfRolls, numberOfDice) {
+    const array = [];
+    for (let i = 0; i < numberOfDice; i++) {
+      array.push(this.sumOfRolls(numberOfRolls));
+    }
+
+    const summedRolls = new SummedRoll(array);
+    console.log(summedRolls.numbers);
+
+    return (summedRolls.sum);
+  }
+
+
 }
+
+const D6 = new Die(6);
+
+
+console.log(D6.sumOfRollsAndNumberOfDice(3, 2));
+
+

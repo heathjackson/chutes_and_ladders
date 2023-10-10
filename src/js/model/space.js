@@ -36,7 +36,8 @@ export class Space {
   /**
    * Is a method to be invoked when an avatar lands (or stops) on a space.
    * @param avatar
-   */
+  **/
+ 
   land(avatar) {
     // TODO - Implement landing on the space
   }

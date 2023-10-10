@@ -17,19 +17,22 @@
  * Player 1 rolls a single dice 3 times and gets the values { [3,1,5], 9 }
  * Player 2 rolls a single dice 3 times and gets the values { [6, 3, 3], 12 }
  */
+
 export class SummedRoll {
-  #Numbers = Array(0)
-  #Sum = -1
-  constructor(numbers) {
-    // TODO - Implement the constructor
+  #Sum = -1;
+  #Numbers = Array(0);
+
+  constructor(array) {
+    this.#Numbers = [...array];
+    this.#Sum = array.reduce((a, b) => a+ b);
   }
 
   // Should return an array of numbers
-  get rollValues() {
-    return this.#Numbers
+  get numbers() {
+    return this.#Numbers;
   }
   // Should return a sum of all the roles as a number value
   get sum() {
-    return this.#Sum
+    return this.#Sum;
   }
 }
