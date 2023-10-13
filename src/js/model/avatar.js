@@ -1,6 +1,6 @@
+import "./space.js";
 
 // Add avatar implementations here
-
 export class Color {
     static UNDEFINED = 0;
     static RED = 1;
@@ -20,14 +20,15 @@ export class Avatar {
     #Name = "";
     #Color = Color.UNDEFINED;
 
+
     /**
      *
      * @param name the name of the avatar example: Car, Top Hat, Black Cat, etc
      * @param color the color of the avatar
      */
     constructor(name, color) {
-        this.#Name = name
-        this.#Color = color
+        this.#Name = name;
+        this.#Color = color;
     }
 
     get name() {
@@ -42,11 +43,20 @@ export class Avatar {
         return this.#Color;
     }
 
-    set location(loc) {
-        this.#Location = loc
+    set location(space) {
+        this.#Location = space
     }
 
     move(numberOfSpaces) {
+        let location = this.#Location
+        
+        for(let i = 0; i < numberOfSpaces; i++){
+            location = location.next
+        }
+
+        location.leave()
+        location.land(this)
+
         // TODO - Implement how an Avatar can move between spaces given that it knows it's own location
     }
 }

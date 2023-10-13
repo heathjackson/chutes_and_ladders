@@ -45,12 +45,12 @@ export class Die {
     
     const summedRolls = new SummedRoll(array);
     console.log(summedRolls.numbers);
-    console.log(summedRolls.sum);
+    console.log(summedRolls.sum)
 
     return summedRolls.sum; 
   }
 
-  sumOfRollsAndNumberOfDice(numberOfRolls, numberOfDice) {
+  sumOfRollsAndNumOfDice(numberOfRolls, numberOfDice) {
     const array = [];
     for (let i = 0; i < numberOfDice; i++) {
       array.push(this.sumOfRolls(numberOfRolls));
@@ -65,9 +65,9 @@ export class Die {
 
 }
 
-const D6 = new Die(6);
+// const D6 = new Die(6);
 
 
-console.log(D6.sumOfRollsAndNumberOfDice(3, 2));
+// console.log(D6.sumOfRollsAndNumOfDice(3, 2));
 
 

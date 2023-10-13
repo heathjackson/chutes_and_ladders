@@ -14,6 +14,8 @@
 
 // Add player implementations here
 
+import { Avatar } from "./avatar.js";
+
 export class Player {
   #Name = "";
   #Order = -1;
@@ -41,4 +43,12 @@ export class Player {
   }
 
   // TODO - Fill in the remaining getters
+
+  get order() {
+    return this.#Order;
+  }
+
+  get avatar() {
+    return this.#Avatar;
+  }
 }
