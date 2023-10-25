@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1698192883063" clover="3.2.0">
+  <project timestamp="1698192883064" name="All files">
+    <metrics statements="109" coveredstatements="104" conditionals="16" coveredconditionals="16" methods="28" coveredmethods="23" elements="153" coveredelements="143" complexity="0" loc="109" ncloc="109" packages="1" files="4" classes="4"/>
+    <file name="avatar.js" path="/Users/heatherjackson/projects/wdg/chutes_and_ladders/src/js/model/avatar.js">
+      <metrics statements="31" coveredstatements="30" conditionals="6" coveredconditionals="6" methods="6" coveredmethods="5"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="7" count="1" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="9" count="1" type="stmt"/>
+      <line num="10" count="1" type="stmt"/>
+      <line num="11" count="1" type="stmt"/>
+      <line num="12" count="1" type="stmt"/>
+      <line num="13" count="1" type="stmt"/>
+      <line num="14" count="1" type="stmt"/>
+      <line num="15" count="1" type="stmt"/>
+      <line num="16" count="1" type="stmt"/>
+      <line num="20" count="4" type="stmt"/>
+      <line num="21" count="4" type="stmt"/>
+      <line num="22" count="4" type="stmt"/>
+      <line num="31" count="4" type="stmt"/>
+      <line num="32" count="4" type="stmt"/>
+      <line num="36" count="2" type="stmt"/>
+      <line num="40" count="11" type="stmt"/>
+      <line num="44" count="0" type="stmt"/>
+      <line num="48" count="11" type="stmt"/>
+      <line num="52" count="9" type="stmt"/>
+      <line num="54" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="55" count="7" type="stmt"/>
+      <line num="56" count="13" type="cond" truecount="2" falsecount="0"/>
+      <line num="57" count="1" type="stmt"/>
+      <line num="60" count="12" type="stmt"/>
+      <line num="65" count="2" type="stmt"/>
+      <line num="66" count="5" type="cond" truecount="2" falsecount="0"/>
+      <line num="67" count="1" type="stmt"/>
+      <line num="69" count="4" type="stmt"/>
+      <line num="74" count="7" type="stmt"/>
+    </file>
+    <file name="die.js" path="/Users/heatherjackson/projects/wdg/chutes_and_ladders/src/js/model/die.js">
+      <metrics statements="10" coveredstatements="10" conditionals="2" coveredconditionals="2" methods="4" coveredmethods="4"/>
+      <line num="4" count="2" type="stmt"/>
+      <line num="10" count="6" type="stmt"/>
+      <line num="12" count="6" type="cond" truecount="2" falsecount="0"/>
+      <line num="17" count="100" type="stmt"/>
+      <line num="22" count="160" type="stmt"/>
+      <line num="27" count="3" type="stmt"/>
+      <line num="28" count="3" type="stmt"/>
+      <line num="29" count="60" type="stmt"/>
+      <line num="32" count="3" type="stmt"/>
+      <line num="33" count="3" type="stmt"/>
+    </file>
+    <file name="space.js" path="/Users/heatherjackson/projects/wdg/chutes_and_ladders/src/js/model/space.js">
+      <metrics statements="62" coveredstatements="59" conditionals="8" coveredconditionals="8" methods="14" coveredmethods="11"/>
+      <line num="19" count="1" type="stmt"/>
+      <line num="20" count="1" type="stmt"/>
+      <line num="21" count="1" type="stmt"/>
+      <line num="22" count="1" type="stmt"/>
+      <line num="23" count="1" type="stmt"/>
+      <line num="26" count="1" type="stmt"/>
+      <line num="29" count="14" type="stmt"/>
+      <line num="30" count="14" type="stmt"/>
+      <line num="31" count="14" type="stmt"/>
+      <line num="32" count="14" type="stmt"/>
+      <line num="33" count="14" type="stmt"/>
+      <line num="34" count="14" type="stmt"/>
+      <line num="37" count="14" type="stmt"/>
+      <line num="38" count="14" type="stmt"/>
+      <line num="45" count="2" type="stmt"/>
+      <line num="53" count="11" type="stmt"/>
+      <line num="61" count="18" type="stmt"/>
+      <line num="69" count="12" type="stmt"/>
+      <line num="78" count="14" type="stmt"/>
+      <line num="82" count="4" type="stmt"/>
+      <line num="86" count="14" type="stmt"/>
+      <line num="94" count="0" type="stmt"/>
+      <line num="103" count="4" type="stmt"/>
+      <line num="113" count="0" type="stmt"/>
+      <line num="120" count="11" type="stmt"/>
+      <line num="135" count="11" type="cond" truecount="4" falsecount="0"/>
+      <line num="136" count="2" type="stmt"/>
+      <line num="137" count="2" type="stmt"/>
+      <line num="140" count="11" type="cond" truecount="2" falsecount="0"/>
+      <line num="141" count="2" type="stmt"/>
+      <line num="142" count="2" type="stmt"/>
+      <line num="145" count="9" type="cond" truecount="2" falsecount="0"/>
+      <line num="146" count="2" type="stmt"/>
+      <line num="150" count="7" type="stmt"/>
+      <line num="151" count="7" type="stmt"/>
+      <line num="162" count="0" type="stmt"/>
+      <line num="166" count="1" type="stmt"/>
+      <line num="167" count="1" type="stmt"/>
+      <line num="168" count="1" type="stmt"/>
+      <line num="171" count="1" type="stmt"/>
+      <line num="172" count="1" type="stmt"/>
+      <line num="173" count="1" type="stmt"/>
+      <line num="174" count="1" type="stmt"/>
+      <line num="175" count="1" type="stmt"/>
+      <line num="176" count="1" type="stmt"/>
+      <line num="177" count="1" type="stmt"/>
+      <line num="179" count="1" type="stmt"/>
+      <line num="180" count="1" type="stmt"/>
+      <line num="181" count="1" type="stmt"/>
+      <line num="182" count="1" type="stmt"/>
+      <line num="183" count="1" type="stmt"/>
+      <line num="184" count="1" type="stmt"/>
+      <line num="185" count="1" type="stmt"/>
+      <line num="186" count="1" type="stmt"/>
+      <line num="187" count="1" type="stmt"/>
+      <line num="189" count="1" type="stmt"/>
+      <line num="190" count="1" type="stmt"/>
+      <line num="191" count="1" type="stmt"/>
+      <line num="192" count="1" type="stmt"/>
+      <line num="193" count="1" type="stmt"/>
+      <line num="194" count="1" type="stmt"/>
+      <line num="195" count="1" type="stmt"/>
+    </file>
+    <file name="summed_roll.js" path="/Users/heatherjackson/projects/wdg/chutes_and_ladders/src/js/model/summed_roll.js">
+      <metrics statements="6" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="3"/>
+      <line num="7" count="3" type="stmt"/>
+      <line num="8" count="3" type="stmt"/>
+      <line num="11" count="3" type="stmt"/>
+      <line num="12" count="57" type="stmt"/>
+      <line num="17" count="0" type="stmt"/>
+      <line num="21" count="3" type="stmt"/>
+    </file>
+  </project>
+</coverage>

@@ -1,19 +1,27 @@
+import { Space } from "./space.js";
 
 
 export class Board  {
-
+//in tests this needs to be set to before all
+//create avatars
+//has set up 
+//start with just 20
     #Avatars = [];
 
     show() {
-            let total = 100;
-            for (let i = 10; i >= 1; i--) {
+            let total = 20
+            let array = []
+
+            
+            for (let i = 2; i >= 1; i--) {
                 let row = []
                 for (let j = 1; j<=10; j++) {
-                    row.push(total--);
+                    row.push(new Space)
                 }
                 row = (i%2==0) ? row : row.reverse()
-                console.log(row);
+                array.push(row);
             }
+            console.log(array)
     }
 
     get avatars() {

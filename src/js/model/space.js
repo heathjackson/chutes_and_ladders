@@ -29,55 +29,20 @@ export class Space {
   #Value = ""
   #Type = SpaceType.NORMAL
   #Next = null
+  #Back = null
   #Special = null
-  #Players = []
+  #Avatars = []
 
   constructor(value, type) {
     this.#Value = value
     this.#Type = type
   }
 
-
-  /**
-   * Is a method to be invoked when an avatar lands (or stops) on a space.
-   * @param avatar
-  **/
- 
-  land(avatar) {
-    /*
-    alllow only one player on a space, 
-    if someone is already on the space, push that person to the next space
-    #Players array keeps track if someone is already on the space
-    */
-
-    if(this.occupied && this.#Type !== SpaceType.START) {
-      for(let i = 0; i < this.#Players.length; i++) {
-        this.#Players[i].move(1)
-      } 
-    }
-
-    if(this.#Type === SpaceType.FINISH) {
-      console.log(`${avatar.name} is the Winner Winner Chicken Dinner!`)
-    }
-
-    if(this.#Special !== null) {
-      avatar.location = this.#Special
-    }
-
-
-
-    else{
-      avatar.location = this
-    }
-
-    this.#Players.push(avatar)
-}
-
   /**
    * Is a method to be invoked when an avatar leaves a space
    */
   leave() {
-    this.#Players.pop()
+    this.#Avatars.pop()
   }
 
   /**
@@ -113,6 +78,14 @@ export class Space {
     return this.#Next = space
   }
 
+  get back() {
+    return this.#Back
+  }
+
+  set back(space) {
+    return this.#Back = space
+  }
+
   /**
    *
    * @return {Space | null}
@@ -137,16 +110,47 @@ export class Space {
    */
   get avatars() {
     // returns a copy of the players
-    return [...this.#Players]
+    return [...this.#Avatars]
   }
-
   /**
    * @return boolean true if the space has players, false otherwise
    */
 
   get occupied() {
-    return this.#Players.length > 0
+    return this.#Avatars.length > 0
   }
+
+   /**
+   * Is a method to be invoked when an avatar lands (or stops) on a space.
+   * @param avatar
+  **/
+
+  land(avatar) {
+    /*
+    alllow only one player on a space, 
+    if someone is already on the space, push that person to the next space
+    #Avatars array keeps track if someone is already on the space
+    */
+
+    if(this.occupied && this.#Type !== SpaceType.START) {
+      this.#Avatars[0].move(1)
+      this.leave()
+    } 
+
+    if(this.#Type === SpaceType.FINISH) {
+      console.log(`${avatar.name} is the Winner Winner Chicken Dinner!`)
+      avatar.location = this
+    }
+
+    else if(this.#Special !== null) {
+      avatar.location = this.#Special
+    }
+
+    else{
+      avatar.location = this
+      this.#Avatars.push(avatar)
+    }
+}
 
   /**
    *
@@ -180,17 +184,15 @@ ladder_4.special = normal_6
 chute_5.next = normal_6
 chute_5.special = normal_2
 normal_6.next = finish_7 
-finish_7.next = finish_7
+finish_7.next = null
 
-
-
-start_1.land(Heather)
-start_1.land(Jane)
-Heather.move(roll.sumOfRollsAndNumOfDice(2, 1))
-Jane.move(3)
-Heather.move(2)
-console.log(`Jane Location = ${Jane.location.value} ${Jane.location.type}`)
-console.log(`Heather Location = ${Heather.location.value} ${Heather.location.type}`)
+finish_7.back = normal_6
+normal_6.back = chute_5
+chute_5.back = ladder_4
+ladder_4.back = normal_3
+normal_3.back = normal_2
+normal_2.back = start_1
+start_1.back = null
 
 
 

@@ -5,7 +5,7 @@
   "description": "A fun game to teach the various techniques of programming",
   "main": "main.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "keywords": [],
   "author": "Heather Jackson",

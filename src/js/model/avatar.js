@@ -1,4 +1,5 @@
 import "./space.js";
+import { SpaceType } from "./space.js";
 
 // Add avatar implementations here
 export class Color {
@@ -49,14 +50,29 @@ export class Avatar {
 
     move(numberOfSpaces) {
         let location = this.#Location
-        
-        for(let i = 0; i < numberOfSpaces; i++){
-            location = location.next
+
+        if(numberOfSpaces > 0) {
+            for(let i = 0; i < numberOfSpaces; i++){
+                if(location.type === SpaceType.FINISH){
+                    return location.land(this)
+
+                }else{
+                    location = location.next
+                }
+            }
+
+        }else{
+            for(let i = 0; i > numberOfSpaces; i--){
+                if(location.type === SpaceType.START){
+                    return location.land(this)
+                }else{
+                    location = location.back
+                }
+            }
         }
 
-        location.leave()
-        location.land(this)
+        return location.land(this)
 
-        // TODO - Implement how an Avatar can move between spaces given that it knows it's own location
-    }
+         // TODO - Implement how an Avatar can move between spaces given that it knows it's own location
+    }   
 }
