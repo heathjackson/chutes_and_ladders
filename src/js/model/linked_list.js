@@ -1,62 +1,109 @@
-import { Space, SpaceType } from "./space.js";
 import { Avatar } from "./avatar.js";
+import { Space, SpaceType } from "./space.js";
 
 export class LinkedList {
+  #Head
+  #Tail
+  #Size
+  
   constructor () {
-    this.head = null
-    this.tail = null
-    this.size = 0
+    this.#Head = null
+    this.#Tail = null
+    this.#Size = 0
   }
 
-  //insert first space
+  get head() {
+    return this.#Head
+  }
+
+  get size() {
+    return this.#Size
+  }
+
+  set size(num) {
+    return this.#Size += num
+  }
+
+  get tail() {
+    return this.#Tail
+  }
+
+  isEmpty() {
+    this.#Head === null ? true : false
+  }
+
+  //insert head of linked list
+
   insertFirst(value, type) {
-    this.head = new Space(value, type, this.head)
-    this.size++
+    let newSpace = new Space(value, type)
+
+    newSpace.next = this.#Head
+    this.#Head = newSpace
+    newSpace.back = null
+    this.size = 1
   }
 
-  //insert normal spaces
-  insertMiddleSpaces(startValue, type, totalSpaces) {
-    let value = startValue
-    let current = this.head
+  //insert board spaces including start and finish
 
-    for(let i = 0; i < totalSpaces; i++) {
-      current.next = new Space(value, type)
+  insertSpaces(totalSpaces) {
+
+    if(!this.#Head){
+      this.insertFirst(0, SpaceType.START)
+    }
+
+
+    let current = this.#Head
+    
+    for(let i = 1; i < totalSpaces - 1; i++) {
+      let newSpace = new Space(i, SpaceType.NORMAL)
+    
+      current.next = newSpace
+      newSpace.back = current
+      this.#Tail = newSpace
       current = current.next
-      value++
-      this.size++
+      this.size = 1
     }
+
+    this.insertLast(SpaceType.FINISH)
   }
 
+  //insert finish space at end
 
-  //insert last space
-  insertLast(type) {
-    let space = new Space((this.size), type)
+  insertLast(type){
     let current
+    let newSpace = new Space(this.#Size, type)
 
-    //If empty, make head
+  //if empty, make head
 
-    if(!this.head) {
-      this.head = space
-
-    } else {
-      current = this.head
-
-      while(current.next) {
-        current = current.next
-      }
-
-      current.next = space
-      this.size++
-    }
+  if(!this.#Head) {
+    this.#Head = newSpace
+    this.size = 1
   }
 
-  //get space by it's index
+  current = this.#Head
 
-  getByIndex(index) {
-    if (index < 0 || index >= this.size) return null
+  while(current.next){
+    current = current.next
+  }
 
-    let current = this.head
-    for (let i = 0; i < index; i++){
+  current.next = newSpace
+  newSpace.next = null
+  this.#Tail = newSpace
+
+  this.size = 1
+    
+}
+
+  //get space by it's value
+
+  getByValue(value) {
+    let current = this.#Head
+    
+    if (value < 0 || value >= this.#Size) {
+      return null
+    }
+
+    for (let i = 0; i < value; i++){
       current = current.next
     }
     return current
@@ -66,21 +113,21 @@ export class LinkedList {
 
   printSpaceValue() {
     let output = ''
-    let current = this.head
+    let current = this.#Head
 
     while (current) {
-      output = `${output}${current.value} ->`
+      output = `${output}${current.value} <-> `
       current = current.next
     }
-    console.log(`${output}null`)
+    console.log(`null <-> ${output}null`)
   }
 
   //clear board
 
   clear() {
-    this.head = null
-    this.tail = null
-    this.size = 0
+    this.#Head = null
+    this.#Tail = null
+    this.#Size = 0
   }
 }
 
@@ -93,22 +140,18 @@ LinkedList.fromValues = function(...values){
 }
 
 const ll = new LinkedList();
+ll.insertSpaces(20)
+const heather = new Avatar("car", "red")
+ll.getByValue(0).land(heather)
+heather.move(10)
+console.log(ll.tail.value)
 
-ll.insertFirst(0, SpaceType.START)
+console.log(heather.location.type)
+console.log(ll.size)
 
-ll.insertMiddleSpaces(1, SpaceType.NORMAL, 10)
 
-ll.insertLast(SpaceType.FINISH)
 
-ll.printSpaceValue()
 
-let Jane = new Avatar('Car', 'blue')
-let Heather = new Avatar('Hat', 'red')
 
-ll.getByIndex(0).land(Jane)
-Jane.move(5)
-ll.getByIndex(0).land(Heather)
 
-console.log(Jane.location.type)
-console.log(Heather.location.type)
 

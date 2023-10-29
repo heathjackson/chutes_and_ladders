@@ -33,10 +33,9 @@ export class Space {
   #Special = null
   #Avatars = []
 
-  constructor(value, type, next = null) {
+  constructor(value, type) {
     this.#Value = value
     this.#Type = type
-    this.#Next = next
   }
 
   /**
@@ -164,36 +163,7 @@ export class Space {
   }
 }
 
-// let Jane = new Avatar('Car', 'blue')
-// let Heather = new Avatar('Hat', 'red')
-// let roll = new Die(4)
 
-
-// let start_1 = new Space(1, SpaceType.START)
-// let normal_2 = new Space(2, SpaceType.NORMAL)
-// let normal_3 = new Space(3, SpaceType.NORMAL)
-// let ladder_4 = new Space(4, SpaceType.LADDER)
-// let chute_5 = new Space(5, SpaceType.CHUTE)
-// let normal_6 = new Space(6, SpaceType.NORMAL)
-// let finish_7 = new Space(7, SpaceType.FINISH)
-
-// start_1.next = normal_2
-// normal_2.next = normal_3
-// normal_3.next = ladder_4 
-// ladder_4.next = chute_5
-// ladder_4.special = normal_6 
-// chute_5.next = normal_6
-// chute_5.special = normal_2
-// normal_6.next = finish_7 
-// finish_7.next = null
-
-// finish_7.back = normal_6
-// normal_6.back = chute_5
-// chute_5.back = ladder_4
-// ladder_4.back = normal_3
-// normal_3.back = normal_2
-// normal_2.back = start_1
-// start_1.back = null
 
 
 
