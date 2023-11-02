@@ -93,7 +93,8 @@ export class Board {
     const randomNum = Math.floor(Math.random() * 2)
 
      // Return "chute" if random number is 0, "ladder" if it's 1
-     return randomNum === 0 ? "chute" : "ladder";
+    
+    return randomNum === 0 ? "chute" : "ladder"
   }
 
   //create ladder space
@@ -125,9 +126,11 @@ export class Board {
   //create board
 
   createBoard() {
-    let totalSpaces = this.#Rows * this.#Columns
+    const totalSpaces = this.#Rows * this.#Columns
+    const allSpecialSpaces = this.specialSpaces()
     let totalLadders = this.#Ladders
     let totalChutes = this.#Chutes
+    
 
     for(let i = totalSpaces - 1; i >= 0; i--){
       if(i == 0){
@@ -140,7 +143,7 @@ export class Board {
         let topLadderSpace = this.#TopLadderSpaces.find(space => space.value === i)
         this.addSpace(topLadderSpace)
 
-      }else if(this.specialSpaces().includes(i)) {
+      }else if(allSpecialSpaces.includes(i)) {
         if (i < totalSpaces - this.#Columns && totalLadders > 0 || 
           i < totalSpaces - this.#Columns && totalLadders > 0 && totalChutes === 0 ) {
 
@@ -154,7 +157,7 @@ export class Board {
           totalChutes--
 
         }else{
-          if(this.chuteOrLadder() === ladder) {
+          if(this.chuteOrLadder() === "ladder") {
             this.ladderSpace(i)
             totalLadders--
 
