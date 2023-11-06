@@ -17,6 +17,7 @@ export class Color {
 }
 
 export class Avatar {
+    #Winner = false
     #Location = null;
     #Name = "";
     #Color = Color.UNDEFINED;
@@ -45,21 +46,35 @@ export class Avatar {
     }
 
     set location(space) {
-        this.#Location = space
+        return this.#Location = space
+    }
+
+    get winner() {
+       return this.#Winner
+    }
+
+    set winner(winnerStatus) {
+        this.Winner = winnerStatus
     }
 
     move(numberOfSpaces) {
         let location = this.#Location
 
+        //If the number of spaces rolled is a positive number, then move the avatar
+        //forward that number of spaces.  If the avatar is moved to the finish space the avatar is landed.
+
         if(numberOfSpaces > 0) {
             for(let i = 0; i < numberOfSpaces; i++){
                 if(location.type === SpaceType.FINISH){
                     return location.land(this)
-
+                    
                 }else{
                     location = location.next
                 }
             }
+
+        //If the number of spaces rolled is a negative number, then move the avatar
+        //backward that number of spaces.  If the avatar is moved to the start space the avatar is landed.
 
         }else{
             for(let i = 0; i > numberOfSpaces; i--){
@@ -74,5 +89,9 @@ export class Avatar {
         return location.land(this)
 
          // TODO - Implement how an Avatar can move between spaces given that it knows it's own location
-    }   
+    }
+    
+    toggleWinner() {
+        this.#Winner = !this.#Winner
+    }
 }

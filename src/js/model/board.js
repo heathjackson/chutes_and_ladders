@@ -1,4 +1,3 @@
-import { Avatar } from "./avatar.js";
 import { Space, SpaceType } from "./space.js";
 
 export class Board {
@@ -9,7 +8,10 @@ export class Board {
   #Chutes = null
   #Ladders = null
   #Size = 0
-  #TopLadderSpaces = new Array(0)
+  //designate special spaces ahead of time before creating board
+  #SpecialSpacesArray = new Array(0)
+  //holds a 2D array that connects the special space with the designated end space when the space is decided if it's a ladder or a chute
+  #EndSpecialSpaces = new Array (0)
 
   constructor (columns, rows, chutes, ladders) {
     this.#Columns = columns
@@ -38,8 +40,12 @@ export class Board {
     return this.#Ladders
   }
 
-  get topLadderSpaces() {
-    return [...this.#TopLadderSpaces]
+  get specialSpacesArray() {
+    return [...this.#SpecialSpacesArray]
+  }
+
+  get endSpecialSpaces() {
+    return [...this.#EndSpecialSpaces]
   }
 
   //check if list is empty
@@ -51,7 +57,7 @@ export class Board {
 
   addSpace(value, type){
 
-    //create a temporary variable
+    //create a variable to insert
     let temp = new Space(value, type)
 
     if (this.#Start === null) {
@@ -74,121 +80,122 @@ export class Board {
   specialSpaces() {
     let totalSpecial = this.#Chutes + this.#Ladders
     let totalSpaces = this.#Columns * this.#Rows
-    let specialArray = []
 
     for(let i = 0; i < totalSpecial; i++ ){
-      let specialSpace = Math.floor(Math.random() * totalSpaces)
+      let specialSpace = this.randomNumber(1, totalSpaces - 2)
 
-      if(specialArray.includes(specialSpace)){
+      if(this.#SpecialSpacesArray.includes(specialSpace)){
         i--
       }else{
-        specialArray.push(specialSpace)
+        this.#SpecialSpacesArray.push(specialSpace)
       }
     }
-    return specialArray
   }
 
-  //chute or ladder generator
-  chuteOrLadder() {
-    const randomNum = Math.floor(Math.random() * 2)
-
-     // Return "chute" if random number is 0, "ladder" if it's 1
-    
-    return randomNum === 0 ? "chute" : "ladder"
+  randomNumber(min, max) {
+    return Math.floor(Math.random() * (max - min) + min)
   }
 
+ 
   //create ladder space
   ladderSpace(value) {
+    this.addSpace(value, SpaceType.LADDER)
 
-    //use the ladder space value perameter to determine the max and min for where the ladder ends
-    const max = Math.ceil(this.#Columns * this.#Rows)
-    const min = Math.floor(value + 1)
+    const totalSpaces = this.#Columns * this.#Rows
+    let endLadder = this.randomNumber(value + this.#Columns, totalSpaces - 2)
 
-    let randomLadderTop = Math.floor(Math.random() * (max - min + 1) + min)
-    let ladder = new Space(value, SpaceType.LADDER)
-    ladder.special = new Space(randomLadderTop, SpaceType.NORMAL)
-
-    this.#TopLadderSpaces.push(ladder.special)
+    this.#SpecialSpacesArray.includes(endLadder) ? endLadder = this.randomNumber(value + this.#Columns, totalSpaces - 2) : endLadder
+    this.#EndSpecialSpaces.map((specialSpace) => {
+      if(specialSpace[1] === endLadder){
+        endLadder = this.randomNumber(value + this.#Columns, totalSpaces - 2)
+      }
+    })
+  
+    this.#EndSpecialSpaces.push([value, endLadder])
   }
 
   //create chute Space
   chuteSpace(value) {
-    const max = Math.ceil(value - 1)
-    const min = Math.floor(0)
+    this.addSpace(value, SpaceType.CHUTE)
 
-    let chute = new Space(value, SpaceType.CHUTE)
-    let chuteEnd =  Math.floor(Math.random() * (max - min + 1) + min)
+    const endChuteCreater = () => {
+      return this.randomNumber(1, value - (this.#Columns - 1))
+    }
 
-    let chuteSpecial = this.getByIndex(chuteEnd)
-    chute.special = chuteSpecial
+    let endChute = endChuteCreater()
+
+    this.#SpecialSpacesArray.includes(endChute) ? endChute = endChuteCreater() : endChute
+
+    this.#EndSpecialSpaces.map((specialSpace) => {
+      if(specialSpace[1] === endChute){
+        endChute = endChuteCreater()
+      }
+    })
+    
+    this.#EndSpecialSpaces.push([value, endChute])
   }
 
   //create board
-
   createBoard() {
     const totalSpaces = this.#Rows * this.#Columns
-    const allSpecialSpaces = this.specialSpaces()
     let totalLadders = this.#Ladders
     let totalChutes = this.#Chutes
-    
+
+    this.specialSpaces()
 
     for(let i = totalSpaces - 1; i >= 0; i--){
-      if(i == 0){
+      if(i === 0){
         this.addSpace(i, SpaceType.START)
 
-      }else if(i === totalSpaces -1) {
+      }else if(i === totalSpaces - 1) {
         this.addSpace(i, SpaceType.FINISH)
 
-      }else if (this.#TopLadderSpaces.some(space => space.value === i)) {
-        let topLadderSpace = this.#TopLadderSpaces.find(space => space.value === i)
-        this.addSpace(topLadderSpace)
+      }else if(this.#SpecialSpacesArray.includes(i)) {
 
-      }else if(allSpecialSpaces.includes(i)) {
-        if (i < totalSpaces - this.#Columns && totalLadders > 0 || 
-          i < totalSpaces - this.#Columns && totalLadders > 0 && totalChutes === 0 ) {
-
+        if (i < this.#Columns && totalLadders > 0) {
             this.ladderSpace(i)
             totalLadders--
-
-        }else if(i > this.#Columns && totalChutes > 0 || 
-          i > this.#Columns && totalChutes > 0 && totalLadders === 0) {
-
+            
+        }else if(i >= totalSpaces - this.#Columns && totalChutes > 0) {
           this.chuteSpace(i)
           totalChutes--
 
-        }else{
-          if(this.chuteOrLadder() === "ladder") {
+        }else if((this.randomNumber(0, 2) === 0 && totalLadders > 0) || (totalLadders > 0 && totalChutes === 0)) {
             this.ladderSpace(i)
             totalLadders--
 
-          }else{
+        }else{
             this.chuteSpace(i)
             totalChutes--
           }
-        }
       }
-      
+
       else{
         this.addSpace(i, SpaceType.NORMAL)
       }
     }
+
+    this.#EndSpecialSpaces.map((space) => {
+      let specialSpace = this.getSpaceByValue(space[0])
+      let chuteEnd = this.getSpaceByValue(space[1])
+      specialSpace.special = chuteEnd
+    })
+    
+
+    console.log(`total chutes = ${totalChutes}, total ladders = ${totalLadders}`)
   }
 
   //get space by it's value
-
-  getByIndex(index) {
+  getSpaceByValue(value) {
     let current = this.#Start
-    
-    if (index < 0 || index >= this.#Size) {
-      return null
-    }
 
-    for (let i = 0; i < index; i++){
+    while(current.value !== value && current.next !== null){
       current = current.next
     }
+
     return current
   }
-
+    
   //clear board
 
   clear() {
@@ -203,12 +210,16 @@ export class Board {
     let current = this.#Start
 
     while(current) {
-      console.log(current.value)
+      console.log(`value = ${current.value} type = ${current.type}`)
+      if(current.special){
+        console.log(`special = ${current.special.value}`)
+      }
       current = current.next
     }
   }
 }
 
+//used this in testing to isolate testing for different functions
 Board.fromValues = function(...values){
   const ll = new Board()
   for (let i = values.length - 1; i >= 0; i--){
@@ -221,28 +232,16 @@ let newBoard = new Board(10, 10, 5, 5)
 
 newBoard.createBoard()
 newBoard.display()
-// newBoard.ladderSpace(7)
-// newBoard.ladderSpace(10)
-// console.log(newBoard.topLadderSpaces[0].value)
-// console.log(newBoard.topLadderSpaces[1].value)
+console.log(newBoard.specialSpacesArray)
+newBoard.endSpecialSpaces.map((space) => {
+  console.log(space)
+})
 
-// console.log(newBoard.start.type)
-// console.log(newBoard.finish.type)
-// console.log(newBoard.size)
-// console.log(newBoard.specialSpaces(10))
 
-let Heather = new Avatar("car", "red")
-let Sally = new Avatar("hat", "blue")
-newBoard.start.land(Heather)
-newBoard.start.land(Sally)
-console.log(Heather.location.value)
-console.log(Sally.location.value)
-Heather.move(6)
-Sally.move(6)
-Heather.move(10)
-Sally.move(8)
-console.log(Heather.location.value)
-console.log(Sally.location.value)
+
+
+
+
 
 
 

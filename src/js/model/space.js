@@ -103,7 +103,6 @@ export class Space {
     return this.#Special = space
   }
 
-
   /**
    *
    * @return {*[]} a copy of the array of players
@@ -117,7 +116,7 @@ export class Space {
    */
 
   get occupied() {
-    return this.#Avatars.length > 0
+    return this.#Avatars.length > 0 ? true : false
   }
 
    /**
@@ -131,6 +130,9 @@ export class Space {
     if someone is already on the space, push that person to the next space
     #Avatars array keeps track if someone is already on the space
     */
+    if(avatar.winner) {
+      return
+    }
 
     if(this.occupied && this.#Type !== SpaceType.START) {
       this.#Avatars[0].move(1)
@@ -138,9 +140,11 @@ export class Space {
     } 
 
     if(this.#Type === SpaceType.FINISH) {
-      console.log(`${avatar.name} is the Winner Winner Chicken Dinner!`)
-      avatar.location = this
+        avatar.location = this
+        console.log(`${avatar.name} is the Winner Winner Chicken Dinner!`)
+        avatar.toggleWinner()
     }
+    
 
     else if(this.#Special !== null) {
       avatar.location = this.#Special

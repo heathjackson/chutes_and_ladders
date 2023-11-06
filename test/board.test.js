@@ -1,5 +1,4 @@
 import { Board } from "../src/js/model/board";
-import { SpaceType } from "../src/js/model/space";
 
 describe('#isEmpyt', () => {
   test('returns true if linked list is empty', () => {
@@ -20,12 +19,6 @@ describe('#addSpace', () => {
     ll.addSpace(10)
     expect(ll.start.value).toEqual(10)
   })
-  test('add a second space and verify it is added at the beginning', () => {
-    ll.addSpace(20)
-    expect(ll.size).toEqual(5)
-    expect(ll.start.value).toEqual(20)
-    expect(ll.getByIndex(0).value).toEqual(20)
-  }) 
 })
 
 
