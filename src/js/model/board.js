@@ -49,11 +49,6 @@ export class Board {
     return [...this.#EndSpecialSpaces]
   }
 
-  //check if list is empty
-  isEmpty() {
-    return this.#Start == null ? true : false
-  }
-
   //method to add space to end of doubly linked list
 
   addSpace(value, type){
@@ -88,8 +83,11 @@ export class Board {
     for(let i = 0; i < totalSpecial; i++ ){
       let specialSpace = randomNumber(1, totalSpaces - 2)
 
+    //verify there are no duplicates of special spaces
       if(this.#SpecialSpacesArray.includes(specialSpace)){
         i--
+
+    //create a space holder for a special space to be created
       }else{
         this.#SpecialSpacesArray.push(specialSpace)
       }
@@ -101,15 +99,32 @@ export class Board {
     this.addSpace(value, SpaceType.LADDER)
 
     const totalSpaces = this.#Columns * this.#Rows
-    let endLadder = randomNumber(value + this.#Columns, totalSpaces - 2)
 
-    this.#SpecialSpacesArray.includes(endLadder) ? endLadder = randomNumber(value + this.#Columns, totalSpaces - 2) : endLadder
+    //function that creates an end ladder space holder and guarantees the ladder will not 
+    //end further than 2 spaces before the end
+    const endLadderCreater = () => {
+      if(value + this.#Columns > totalSpaces - 2) {
+        return totalSpaces - 2
+      } else {
+        return randomNumber(value + this.#Columns, totalSpaces - 2)
+      }
+    }
+
+    let endLadder = endLadderCreater()
+
+    //verify that the end ladder space has not been used for a beginning special space if it has
+    //populate another random end space holder
+    this.#SpecialSpacesArray.includes(endLadder) ? endLadder = endLadderCreater() : endLadder
+
+    //verify that the end ladder has also not been duplicated in end special spaces, if it has 
+    //generate another random end space holder
     this.#EndSpecialSpaces.map((specialSpace) => {
       if(specialSpace[1] === endLadder){
         endLadder = randomNumber(value + this.#Columns, totalSpaces - 2)
       }
     })
   
+    //if everything passes and there are no duplicates push the beginning and end values to end special in a 2d array to keep value pairs connected
     this.#EndSpecialSpaces.push([value, endLadder])
   }
 
@@ -117,14 +132,22 @@ export class Board {
   chuteSpace(value) {
     this.addSpace(value, SpaceType.CHUTE)
 
+    //function that creates an end chute space holder and verifies the end space will not be less than 2
     const endChuteCreater = () => {
-      return randomNumber(1, value - (this.#Columns - 1))
+      if(value - (this.#Columns - 1) < 3) {
+        return 2
+      }
+      return randomNumber(3, value - (this.#Columns - 1))
     }
 
     let endChute = endChuteCreater()
 
+    //verify the end chute space has not been used for a beginning special space if it has
+    //populate another random end space holder
     this.#SpecialSpacesArray.includes(endChute) ? endChute = endChuteCreater() : endChute
 
+    //verify the end chute has also not been duplicated in end special spaces, if it has 
+    //generate another random end space holder
     this.#EndSpecialSpaces.map((specialSpace) => {
       if(specialSpace[1] === endChute){
         endChute = endChuteCreater()
@@ -180,7 +203,7 @@ export class Board {
       specialSpace.special = chuteEnd
     })
     
-
+    
     console.log(`total chutes = ${totalChutes}, total ladders = ${totalLadders}`)
   }
 
@@ -235,7 +258,6 @@ console.log(newBoard.specialSpacesArray)
 newBoard.endSpecialSpaces.map((space) => {
   console.log(space)
 })
-
 
 
 
