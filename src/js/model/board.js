@@ -137,6 +137,7 @@ export class Board {
       if(value - (this.#Columns - 1) < 3) {
         return 2
       }
+      //end space will have at least one column variance
       return randomNumber(3, value - (this.#Columns - 1))
     }
 
@@ -157,6 +158,8 @@ export class Board {
     this.#EndSpecialSpaces.push([value, endChute])
   }
 
+  
+
   //create board
   createBoard() {
     const totalSpaces = this.#Rows * this.#Columns
@@ -172,31 +175,46 @@ export class Board {
       }else if(i === totalSpaces - 1) {
         this.addSpace(i, SpaceType.FINISH)
 
+      //if i is a designated special space run the billions of if else statements below the initial if else statement
+
       }else if(this.#SpecialSpacesArray.includes(i)) {
 
-        if (i < this.#Columns && totalLadders > 0) {
-            this.ladderSpace(i)
-            totalLadders--
-            
-        }else if(i >= totalSpaces - this.#Columns && totalChutes > 0) {
+        //if special space will be in the last row make it a chute
+        if(i >= totalSpaces - this.#Columns) {
           this.chuteSpace(i)
           totalChutes--
 
-        }else if((randomNumber(0, 2) === 0 && totalLadders > 0) || (totalLadders > 0 && totalChutes === 0)) {
+        //if special space is not located in the first or last row randomly choose if it's a ladder or a chute
+        }else if(i < totalSpaces - this.#Columns && i >= this.#Columns){
+          if((randomNumber(0, 2) === 0 && totalLadders > 0) || totalChutes === 0) {
             this.ladderSpace(i)
             totalLadders--
 
-        }else{
-            this.chuteSpace(i)
-            totalChutes--
-          }
+          }else{
+              this.chuteSpace(i)
+              totalChutes--
+            }
+        }
+
+        //finally if the special space will be located in the first row make it a ladder
+        else if (i < this.#Columns) {
+            this.ladderSpace(i)
+            totalLadders--
+        }
       }
 
+      //make all other spaces normal spaces
       else{
         this.addSpace(i, SpaceType.NORMAL)
       }
     }
 
+    //if total ladder and total cutes do not both equal 0 re-create the board
+    if (totalLadders !== 0 && totalChutes !== 0){
+      this.createBoard()
+    }
+
+    //create pointers to all the special end spaces after everything else on the board is created
     this.#EndSpecialSpaces.map((space) => {
       let specialSpace = this.getSpaceByValue(space[0])
       let chuteEnd = this.getSpaceByValue(space[1])
