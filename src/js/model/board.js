@@ -1,4 +1,5 @@
 import { Space, SpaceType } from "./space.js";
+import {randomNumber} from "./utils.js"
 
 export class Board {
   #Start = null
@@ -60,12 +61,13 @@ export class Board {
     //create a variable to insert
     let temp = new Space(value, type)
 
+    //if a list has not already been started make this new space both the start and finish
     if (this.#Start === null) {
       this.#Start = temp
       this.#Finish = temp
     }
 
-    //else add item to the start and shift the start
+    //else add the space to the start and shift the start to be the next space after start
 
     else {
       temp.next = this.#Start
@@ -73,6 +75,7 @@ export class Board {
       this.#Start = this.#Start.back
     }
 
+    //now that a new space has been added increase the total number of spaces by one
     this.#Size++
   }
 
@@ -81,8 +84,9 @@ export class Board {
     let totalSpecial = this.#Chutes + this.#Ladders
     let totalSpaces = this.#Columns * this.#Rows
 
+    //run through the total amount of special spaces that need to be created
     for(let i = 0; i < totalSpecial; i++ ){
-      let specialSpace = this.randomNumber(1, totalSpaces - 2)
+      let specialSpace = randomNumber(1, totalSpaces - 2)
 
       if(this.#SpecialSpacesArray.includes(specialSpace)){
         i--
@@ -92,22 +96,17 @@ export class Board {
     }
   }
 
-  randomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min) + min)
-  }
-
- 
   //create ladder space
   ladderSpace(value) {
     this.addSpace(value, SpaceType.LADDER)
 
     const totalSpaces = this.#Columns * this.#Rows
-    let endLadder = this.randomNumber(value + this.#Columns, totalSpaces - 2)
+    let endLadder = randomNumber(value + this.#Columns, totalSpaces - 2)
 
-    this.#SpecialSpacesArray.includes(endLadder) ? endLadder = this.randomNumber(value + this.#Columns, totalSpaces - 2) : endLadder
+    this.#SpecialSpacesArray.includes(endLadder) ? endLadder = randomNumber(value + this.#Columns, totalSpaces - 2) : endLadder
     this.#EndSpecialSpaces.map((specialSpace) => {
       if(specialSpace[1] === endLadder){
-        endLadder = this.randomNumber(value + this.#Columns, totalSpaces - 2)
+        endLadder = randomNumber(value + this.#Columns, totalSpaces - 2)
       }
     })
   
@@ -119,7 +118,7 @@ export class Board {
     this.addSpace(value, SpaceType.CHUTE)
 
     const endChuteCreater = () => {
-      return this.randomNumber(1, value - (this.#Columns - 1))
+      return randomNumber(1, value - (this.#Columns - 1))
     }
 
     let endChute = endChuteCreater()
@@ -160,7 +159,7 @@ export class Board {
           this.chuteSpace(i)
           totalChutes--
 
-        }else if((this.randomNumber(0, 2) === 0 && totalLadders > 0) || (totalLadders > 0 && totalChutes === 0)) {
+        }else if((randomNumber(0, 2) === 0 && totalLadders > 0) || (totalLadders > 0 && totalChutes === 0)) {
             this.ladderSpace(i)
             totalLadders--
 
