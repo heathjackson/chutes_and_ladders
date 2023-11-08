@@ -4,12 +4,13 @@ import { SummedRoll } from "./summed_roll.js";
 const minSides = 4;
 
 export class Die {
-  #Sides
+  #Sides;
 
   constructor(sides) {
-    this.#Sides = sides
-  
-    if(this.#Sides < 4) throw new Error("sides must be greater than or equal to 4")
+    this.#Sides = sides;
+
+    if (this.#Sides < 4)
+      throw new Error("sides must be greater than or equal to 4");
   }
 
   // Should return a number of sides
@@ -26,13 +27,10 @@ export class Die {
   sumOfRolls(numberOfRolls) {
     let array = [];
     for (let i = 0; i < numberOfRolls; i++) {
-        array.push(this.roll());
+      array.push(this.roll());
     }
-    
+
     const summedRolls = new SummedRoll(array);
-    return summedRolls.sum; 
+    return summedRolls.sum;
   }
 }
-
-
-
