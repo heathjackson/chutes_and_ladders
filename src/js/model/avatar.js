@@ -45,7 +45,7 @@ export class Avatar {
   }
 
   set location(space) {
-    return (this.#Location = space);
+    this.#Location = space;
   }
 
   get winner() {
@@ -53,7 +53,7 @@ export class Avatar {
   }
 
   set winner(winnerStatus) {
-    this.Winner = winnerStatus;
+    this.#Winner = winnerStatus;
   }
 
   move(numberOfSpaces) {
@@ -84,11 +84,9 @@ export class Avatar {
     }
 
     return location.land(this);
-
-    // TODO - Implement how an Avatar can move between spaces given that it knows it's own location
   }
 
   toggleWinner() {
-    this.#Winner = !this.#Winner;
+    this.winner = !this.winner;
   }
 }

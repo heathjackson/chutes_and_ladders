@@ -1,4 +1,3 @@
-import { error } from "console";
 import { SummedRoll } from "./summed_roll.js";
 
 const minSides = 4;
@@ -9,8 +8,8 @@ export class Die {
   constructor(sides) {
     this.#Sides = sides;
 
-    if (this.#Sides < 4)
-      throw new Error("sides must be greater than or equal to 4");
+    if (this.#Sides < minSides)
+      throw new Error(`sides must be greater than or equal to ${minSides}`);
   }
 
   // Should return a number of sides

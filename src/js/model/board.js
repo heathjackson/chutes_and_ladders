@@ -1,5 +1,6 @@
 import { Space, SpaceType } from "./space.js";
 import { randomNumber } from "./utils.js";
+import { Avatar } from "./avatar.js";
 
 export class Board {
   #Start = null;
@@ -25,12 +26,24 @@ export class Board {
     return this.#Start;
   }
 
+  set start(space) {
+    this.#Start = space;
+  }
+
   get size() {
     return this.#Size;
   }
 
+  set size(value) {
+    this.#Size += value;
+  }
+
   get finish() {
     return this.#Finish;
+  }
+
+  set finish(space) {
+    this.#Finish = space;
   }
 
   get chutes() {
@@ -45,31 +58,39 @@ export class Board {
     return [...this.#SpecialSpacesArray];
   }
 
+  set specialSpacesArray(value) {
+    this.#SpecialSpacesArray.push(value);
+  }
+
   get endSpecialSpaces() {
     return [...this.#EndSpecialSpaces];
   }
 
-  //method to add space to end of doubly linked list
+  set endSpecialSpaces(value) {
+    this.#EndSpecialSpaces.push(value);
+  }
+
+  //method to add space to beginning of doubly linked list
 
   addSpace(value, type) {
     //create a variable to insert
     let temp = new Space(value, type);
 
     //if a list has not already been started make this new space both the start and finish
-    if (this.#Start === null) {
-      this.#Start = temp;
-      this.#Finish = temp;
+    if (this.start === null) {
+      this.start = temp;
+      this.finish = temp;
     }
 
     //else add the space to the start and shift the start to be the next space after start
     else {
-      temp.next = this.#Start;
-      this.#Start.back = temp;
-      this.#Start = this.#Start.back;
+      temp.next = this.start;
+      this.start.back = temp;
+      this.start = this.start.back;
     }
 
     //now that a new space has been added increase the total number of spaces by one
-    this.#Size++;
+    this.size = 1;
   }
 
   //randomly chooses all the spaces that will either have a chute or ladder
@@ -82,12 +103,12 @@ export class Board {
       let specialSpace = randomNumber(1, totalSpaces - 2);
 
       //verify there are no duplicates of special spaces
-      if (this.#SpecialSpacesArray.includes(specialSpace)) {
+      if (this.specialSpacesArray.includes(specialSpace)) {
         i--;
 
         //create a space holder for a special space to be created
       } else {
-        this.#SpecialSpacesArray.push(specialSpace);
+        this.specialSpacesArray = specialSpace;
       }
     }
   }
@@ -118,7 +139,7 @@ export class Board {
 
     //verify that the end ladder has also not been duplicated in end special spaces, if it has
     //generate another random end space holder
-    this.#EndSpecialSpaces.map((specialSpace) => {
+    this.#EndSpecialSpaces.forEach((specialSpace) => {
       if (specialSpace[1] === endLadder) {
         endLadder = randomNumber(value + this.#Columns, totalSpaces - 2);
       }
@@ -151,13 +172,13 @@ export class Board {
 
     //verify the end chute has also not been duplicated in end special spaces, if it has
     //generate another random end space holder
-    this.#EndSpecialSpaces.map((specialSpace) => {
+    this.#EndSpecialSpaces.forEach((specialSpace) => {
       if (specialSpace[1] === endChute) {
         endChute = endChuteCreater();
       }
     });
 
-    this.#EndSpecialSpaces.push([value, endChute]);
+    this.endSpecialSpaces = [value, endChute];
   }
 
   //create board
@@ -215,7 +236,7 @@ export class Board {
     }
 
     //create pointers to all the special end spaces after everything else on the board is created
-    this.#EndSpecialSpaces.map((space) => {
+    this.#EndSpecialSpaces.forEach((space) => {
       let specialSpace = this.getSpaceByValue(space[0]);
       let chuteEnd = this.getSpaceByValue(space[1]);
       specialSpace.special = chuteEnd;
@@ -269,13 +290,16 @@ Board.fromValues = function (...values) {
   return ll;
 };
 
-let newBoard = new Board(10, 10, 5, 5);
+const newBoard = new Board(10, 10, 5, 5);
+const Heather = new Avatar("car", "red");
 
 newBoard.createBoard();
 newBoard.display();
-console.log(newBoard.specialSpacesArray);
-newBoard.endSpecialSpaces.map((space) => {
-  console.log(space);
-});
-
-console.log(newBoard.size);
+newBoard.start.land(Heather);
+console.log(Heather.location.value);
+Heather.move(2);
+console.log(Heather.location.value);
+Heather.move(10);
+console.log(Heather.location.value);
+Heather.move(5);
+console.log(Heather.location.value);

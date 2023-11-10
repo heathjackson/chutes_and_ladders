@@ -12,37 +12,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Avatar } from "./avatar.js"
-import { Die } from "./die.js"
-
 export class SpaceType {
-  static START = 0
-  static NORMAL = 1
-  static CHUTE = 2
-  static LADDER = 3
-  static FINISH = 4
+  static START = 0;
+  static NORMAL = 1;
+  static CHUTE = 2;
+  static LADDER = 3;
+  static FINISH = 4;
 }
 
-Object.freeze(SpaceType)
+Object.freeze(SpaceType);
 
 export class Space {
-  #Value = ""
-  #Type = SpaceType.NORMAL
-  #Next = null
-  #Back = null
-  #Special = null
-  #Avatars = []
+  #Value = "";
+  #Type = SpaceType.NORMAL;
+  #Next = null;
+  #Back = null;
+  #Special = null;
+  #Avatars = [];
 
   constructor(value, type) {
-    this.#Value = value
-    this.#Type = type
+    this.#Value = value;
+    this.#Type = type;
   }
 
   /**
    * Is a method to be invoked when an avatar leaves a space
    */
   leave() {
-    this.#Avatars.pop()
+    this.#Avatars.pop();
   }
 
   /**
@@ -50,7 +47,7 @@ export class Space {
    * @return {string}
    */
   get value() {
-    return this.#Value
+    return this.#Value;
   }
 
   /**
@@ -58,7 +55,7 @@ export class Space {
    * @return {number}
    */
   get type() {
-    return this.#Type
+    return this.#Type;
   }
 
   /**
@@ -66,7 +63,7 @@ export class Space {
    * @return {Space | null}
    */
   get next() {
-    return this.#Next
+    return this.#Next;
   }
 
   /**
@@ -75,15 +72,15 @@ export class Space {
    * @return {Space} the current space
    */
   set next(space) {
-    return this.#Next = space
+    this.#Next = space;
   }
 
   get back() {
-    return this.#Back
+    return this.#Back;
   }
 
   set back(space) {
-    return this.#Back = space
+    this.#Back = space;
   }
 
   /**
@@ -91,7 +88,7 @@ export class Space {
    * @return {Space | null}
    */
   get special() {
-    return this.#Special
+    return this.#Special;
   }
 
   /**
@@ -100,7 +97,7 @@ export class Space {
    * @return {Space} the current space
    */
   set special(space) {
-    return this.#Special = space
+    this.#Special = space;
   }
 
   /**
@@ -109,20 +106,20 @@ export class Space {
    */
   get avatars() {
     // returns a copy of the players
-    return [...this.#Avatars]
+    return [...this.#Avatars];
   }
   /**
    * @return boolean true if the space has players, false otherwise
    */
 
   get occupied() {
-    return this.#Avatars.length > 0 ? true : false
+    return this.#Avatars.length > 0 ? true : false;
   }
 
-   /**
+  /**
    * Is a method to be invoked when an avatar lands (or stops) on a space.
    * @param avatar
-  **/
+   **/
 
   land(avatar) {
     /*
@@ -130,31 +127,26 @@ export class Space {
     if someone is already on the space, push that person to the next space
     #Avatars array keeps track if someone is already on the space
     */
-    if(avatar.winner) {
-      return
+    if (avatar.winner) {
+      return;
     }
 
-    if(this.occupied && this.#Type !== SpaceType.START) {
-      this.#Avatars[0].move(1)
-      this.leave()
-    } 
-
-    if(this.#Type === SpaceType.FINISH) {
-        avatar.location = this
-        console.log(`${avatar.name} is the Winner Winner Chicken Dinner!`)
-        avatar.toggleWinner()
-    }
-    
-
-    else if(this.#Special !== null) {
-      avatar.location = this.#Special
+    if (this.occupied && this.#Type !== SpaceType.START) {
+      this.#Avatars[0].move(1);
+      this.leave();
     }
 
-    else{
-      avatar.location = this
-      this.#Avatars.push(avatar)
+    if (this.#Type === SpaceType.FINISH) {
+      avatar.location = this;
+      console.log(`${avatar.name} is the Winner Winner Chicken Dinner!`);
+      avatar.toggleWinner();
+    } else if (this.#Special !== null) {
+      avatar.location = this.#Special;
+    } else {
+      avatar.location = this;
+      this.#Avatars.push(avatar);
     }
-}
+  }
 
   /**
    *
@@ -163,18 +155,6 @@ export class Space {
    */
   validate(validators) {
     // TODO - Implement a method that validates the spaces state
-    return false
+    return false;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
