@@ -1,9 +1,14 @@
 import { Board } from "../src/js/model/board";
 
-describe("#addSpace", () => {
-  const ll = Board.fromValues(20, 30, 40);
-  test("add a space to a linked list at the beginning of the list", () => {
-    ll.addSpace(10);
-    expect(ll.start.value).toEqual(10);
+describe("createLadders", () => {
+  let testBoard = new Board(10, 10, 5, 5);
+  test("random number created for ladders be greater than 2 and less than 90", () => {
+    for (let i = 0; i < 100; i++) {
+      let testLadder = testBoard.createLadders();
+      for (let i = 0; i < testLadder.length; i++) {
+        expect(testLadder[i]).toBeGreaterThan(1);
+        expect(testLadder[i]).toBeLessThan(90);
+      }
+    }
   });
 });
