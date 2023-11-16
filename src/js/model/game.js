@@ -2,8 +2,6 @@ import { Space, SpaceType } from "./space.js";
 import { randomNumber } from "./utils.js";
 
 export class Game {
-  // spacesArray = new Array(0);
-
   constructor(columns, rows, ladders, chutes) {
     this.columns = columns;
     this.rows = rows;
