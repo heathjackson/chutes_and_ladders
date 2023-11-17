@@ -76,16 +76,21 @@ export class Game {
     const chutes = specialStartValues.slice(this.ladders);
 
     for (let i = 1; i <= this.total; i++) {
-      if (i === 1) {
-        totalSpaces.push(new Space(i, SpaceType.START));
-      } else if (i === this.total) {
-        totalSpaces.push(new Space(i, SpaceType.FINISH));
-      } else if (ladders.includes(i)) {
-        totalSpaces.push(new Space(i, SpaceType.LADDER));
-      } else if (chutes.includes(i)) {
-        totalSpaces.push(new Space(i, SpaceType.CHUTE));
-      } else {
-        totalSpaces.push(new Space(i, SpaceType.NORMAL));
+      switch (i) {
+        case 1:
+          totalSpaces.push(new Space(i, SpaceType.START));
+          break;
+        case this.total:
+          totalSpaces.push(new Space(i, SpaceType.FINISH));
+          break;
+        case ladders.includes(i):
+          totalSpaces.push(new Space(i, SpaceType.LADDER));
+          break;
+        case chutes.includes(i):
+          totalSpaces.push(new Space(i, SpaceType.CHUTE));
+          break;
+        default:
+          totalSpaces.push(new Space(i, SpaceType.NORMAL));
       }
     }
 
