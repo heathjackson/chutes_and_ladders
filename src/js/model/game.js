@@ -97,10 +97,8 @@ export class Game {
         if (ss.value === space[0]) {
           startSpace = ss;
         }
-      });
-      totalSpaces.forEach((se) => {
-        if (se.value === space[1]) {
-          endSpace = se;
+        if (ss.value === space[1]) {
+          endSpace = ss;
         }
       });
       startSpace.special = endSpace;
