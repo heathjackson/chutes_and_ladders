@@ -2,6 +2,7 @@ import { Space, SpaceType } from "./space.js";
 import { randomNumber } from "./utils.js";
 
 export class Game {
+  SPAN = 45;
   constructor(columns, rows, ladders, chutes) {
     this.columns = columns;
     this.rows = rows;
@@ -23,8 +24,15 @@ export class Game {
     );
   }
 
+  verifySpan(startSpace, endSpace) {
+    return Math.abs(startSpace - endSpace) < this.SPAN;
+  }
+
   boardValidator(startSpace, endSpace, specialArray) {
-    return this.verifyUniqueValue(startSpace, endSpace, specialArray);
+    return (
+      this.verifyUniqueValue(startSpace, endSpace, specialArray) &&
+      this.verifySpan(startSpace, endSpace)
+    );
   }
 
   createLadders() {
