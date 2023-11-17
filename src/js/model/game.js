@@ -2,7 +2,7 @@ import { Space, SpaceType } from "./space.js";
 import { randomNumber } from "./utils.js";
 
 export class Game {
-  SPAN = 45;
+  SPAN = 10;
   constructor(columns, rows, ladders, chutes) {
     this.columns = columns;
     this.rows = rows;
@@ -28,7 +28,7 @@ export class Game {
     return Math.abs(startSpace - endSpace) < this.SPAN;
   }
 
-  boardValidator(startSpace, endSpace, specialArray) {
+  spaceVerifier(startSpace, endSpace, specialArray) {
     return (
       this.verifyUniqueValue(startSpace, endSpace, specialArray) &&
       this.verifySpan(startSpace, endSpace)
@@ -40,7 +40,7 @@ export class Game {
     for (let i = 0; i < this.ladders; i++) {
       let ladderStart = randomNumber(2, this.total - this.columns);
       let ladderEnd = randomNumber(ladderStart + this.columns, this.total - 1);
-      if (this.boardValidator(ladderStart, ladderEnd, totalLadders)) {
+      if (this.spaceVerifier(ladderStart, ladderEnd, totalLadders)) {
         totalLadders.push([ladderStart, ladderEnd]);
       } else {
         i--;
@@ -54,7 +54,7 @@ export class Game {
     for (let i = 0; i < this.chutes; i++) {
       let chuteStart = randomNumber(this.columns + 1, this.total - 1);
       let chuteEnd = randomNumber(2, chuteStart - this.columns);
-      if (this.boardValidator(chuteStart, chuteEnd, totalSpecialSpaces)) {
+      if (this.spaceVerifier(chuteStart, chuteEnd, totalSpecialSpaces)) {
         totalSpecialSpaces.push([chuteStart, chuteEnd]);
       } else {
         i--;
@@ -76,21 +76,16 @@ export class Game {
     const chutes = specialStartValues.slice(this.ladders);
 
     for (let i = 1; i <= this.total; i++) {
-      switch (i) {
-        case 1:
-          totalSpaces.push(new Space(i, SpaceType.START));
-          break;
-        case this.total:
-          totalSpaces.push(new Space(i, SpaceType.FINISH));
-          break;
-        case ladders.includes(i):
-          totalSpaces.push(new Space(i, SpaceType.LADDER));
-          break;
-        case chutes.includes(i):
-          totalSpaces.push(new Space(i, SpaceType.CHUTE));
-          break;
-        default:
-          totalSpaces.push(new Space(i, SpaceType.NORMAL));
+      if (i === 1) {
+        totalSpaces.push(new Space(i, SpaceType.START));
+      } else if (i === this.total) {
+        totalSpaces.push(new Space(i, SpaceType.FINISH));
+      } else if (ladders.includes(i)) {
+        totalSpaces.push(new Space(i, SpaceType.LADDER));
+      } else if (chutes.includes(i)) {
+        totalSpaces.push(new Space(i, SpaceType.CHUTE));
+      } else {
+        totalSpaces.push(new Space(i, SpaceType.NORMAL));
       }
     }
 
@@ -99,12 +94,8 @@ export class Game {
       let endSpace = null;
 
       totalSpaces.forEach((ss) => {
-        if (ss.value === space[0]) {
-          startSpace = ss;
-        }
-        if (ss.value === space[1]) {
-          endSpace = ss;
-        }
+        if (ss.value === space[0]) startSpace = ss;
+        if (ss.value === space[1]) endSpace = ss;
       });
       startSpace.special = endSpace;
     });
@@ -112,3 +103,12 @@ export class Game {
     return totalSpaces;
   }
 }
+
+// let newBoard = new Game(5, 5, 2, 2);
+// let spaces = newBoard.createBoardSpaces();
+// spaces.forEach((sp) => {
+//   console.log(`value = ${sp.value} type = ${sp.type}`);
+//   if (sp.special !== null) {
+//     console.log(`special = ${sp.special.value}`);
+//   }
+// });

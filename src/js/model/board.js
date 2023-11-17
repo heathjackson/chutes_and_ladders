@@ -25,7 +25,6 @@ export class Board {
       }
       this.head = this.head.next;
     }
-    console.log();
   }
 
   clear() {
@@ -33,7 +32,7 @@ export class Board {
   }
 }
 
-let chutes = new Game(10, 10, 5, 5);
+let chutes = new Game(4, 4, 2, 2);
 let newBoard = new Board(chutes.createBoardSpaces());
 newBoard.connectSpaces();
 newBoard.print();
