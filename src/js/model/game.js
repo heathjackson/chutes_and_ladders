@@ -23,44 +23,16 @@ export class Game {
     );
   }
 
-  correctStartLoc(startSpace, type) {
-    if (type === "ladder") {
-      return startSpace < this.total - this.columns && startSpace > 1;
-    } else {
-      return startSpace > this.columns && startSpace < this.total;
-    }
-  }
-
-  correctEndLoc(startSpace, endSpace, type) {
-    if (type === "ladder") {
-      return (
-        endSpace > startSpace + this.columns &&
-        endSpace < startSpace + 15 &&
-        endSpace < this.total
-      );
-    } else {
-      return (
-        endSpace < startSpace - this.columns &&
-        endSpace > startSpace - 15 &&
-        endSpace > 1
-      );
-    }
-  }
-
-  boardValidator(startSpace, endSpace, specialArray, type) {
-    return (
-      this.verifyUniqueValue(startSpace, endSpace, specialArray) &&
-      this.correctStartLoc(startSpace, type) &&
-      this.correctEndLoc(startSpace, endSpace, type)
-    );
+  boardValidator(startSpace, endSpace, specialArray) {
+    return this.verifyUniqueValue(startSpace, endSpace, specialArray);
   }
 
   createLadders() {
     let totalLadders = new Array(0);
     for (let i = 0; i < this.ladders; i++) {
-      let ladderStart = randomNumber(0, this.total);
-      let ladderEnd = randomNumber(0, this.total);
-      if (this.boardValidator(ladderStart, ladderEnd, totalLadders, "ladder")) {
+      let ladderStart = randomNumber(2, this.total - this.columns);
+      let ladderEnd = randomNumber(ladderStart + this.columns, this.total - 1);
+      if (this.boardValidator(ladderStart, ladderEnd, totalLadders)) {
         totalLadders.push([ladderStart, ladderEnd]);
       } else {
         i--;
@@ -72,11 +44,9 @@ export class Game {
   createTotalSpecialSpaces() {
     let totalSpecialSpaces = this.createLadders();
     for (let i = 0; i < this.chutes; i++) {
-      let chuteStart = randomNumber(0, this.total);
-      let chuteEnd = randomNumber(0, this.total);
-      if (
-        this.boardValidator(chuteStart, chuteEnd, totalSpecialSpaces, "chute")
-      ) {
+      let chuteStart = randomNumber(this.columns + 1, this.total - 1);
+      let chuteEnd = randomNumber(2, chuteStart - this.columns);
+      if (this.boardValidator(chuteStart, chuteEnd, totalSpecialSpaces)) {
         totalSpecialSpaces.push([chuteStart, chuteEnd]);
       } else {
         i--;
