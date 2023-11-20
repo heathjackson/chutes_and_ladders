@@ -3,25 +3,25 @@ import { randomNumber } from "./utils.js";
 
 export class Game {
   SPAN = 10;
-  constructor(columns, rows, ladders, chutes) {
-    this.columns = columns;
-    this.rows = rows;
+  COLUMNS = 5;
+  ROWS = 5;
+  TOTAL = 25;
+  constructor(ladders, chutes) {
     this.ladders = ladders;
     this.chutes = chutes;
-    this.total = this.columns * this.rows;
   }
 
-  verifyUniqueValue(startSpace, endSpace, specialArray) {
-    let specialValues = new Array(0);
-    specialArray.forEach((array) => {
-      array.forEach((arr) => {
-        specialValues.push(arr);
-      });
-    });
-
-    return (
-      !specialValues.includes(startSpace) && !specialValues.includes(endSpace)
-    );
+  verifyUniqueValue(startSpace, endSpace, specials) {
+    let isUnique = true;
+    if (
+      endSpace in specials ||
+      startSpace in specials ||
+      Object.values(specials).includes(endSpace) ||
+      Object.values(specials).includes(startSpace)
+    ) {
+      isUnique = false;
+    }
+    return isUnique;
   }
 
   verifySpan(startSpace, endSpace) {
@@ -36,12 +36,14 @@ export class Game {
   }
 
   createLadders() {
-    let totalLadders = new Array(0);
+    let totalLadders = {};
     for (let i = 0; i < this.ladders; i++) {
-      let ladderStart = randomNumber(2, this.total - this.columns);
-      let ladderEnd = randomNumber(ladderStart + this.columns, this.total - 1);
+      let ladderStart = randomNumber(2, this.TOTAL - this.COLUMNS);
+      let ladderEnd = randomNumber(ladderStart + this.COLUMNS, this.TOTAL - 1);
       if (this.spaceVerifier(ladderStart, ladderEnd, totalLadders)) {
-        totalLadders.push([ladderStart, ladderEnd]);
+        {
+          totalLadders[ladderStart] = ladderEnd;
+        }
       } else {
         i--;
       }
@@ -104,7 +106,7 @@ export class Game {
   }
 }
 
-// let newBoard = new Game(5, 5, 2, 2);
+let newBoard = new Game(4, 0);
 // let spaces = newBoard.createBoardSpaces();
 // spaces.forEach((sp) => {
 //   console.log(`value = ${sp.value} type = ${sp.type}`);
@@ -112,3 +114,4 @@ export class Game {
 //     console.log(`special = ${sp.special.value}`);
 //   }
 // });
+newBoard.createLadders();
