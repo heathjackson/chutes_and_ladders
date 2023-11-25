@@ -13,11 +13,9 @@ export class Board {
   createAllSpaces() {
     for (let i = 1; i <= this.totalSpaces; i++) {
       let found = this.specialArray.find((e) => e.value === i);
-      if (found) {
-        this.TOTAL_SPACES_ARRAY.push(found);
-      } else {
-        this.TOTAL_SPACES_ARRAY.push(this.spaceMaker(i, SpaceType.NORMAL));
-      }
+      found
+        ? this.TOTAL_SPACES_ARRAY.push(found)
+        : this.TOTAL_SPACES_ARRAY.push(this.spaceMaker(i, SpaceType.NORMAL));
     }
   }
 
