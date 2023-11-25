@@ -2,16 +2,18 @@ import { Space, SpaceType } from "./space.js";
 import { randomNumber } from "./utils.js";
 
 export class Game {
+  START = 1;
+  FINISH = 25;
   SPAN = 15;
   COLUMNS = 5;
   ROWS = 5;
-  TOTAL = 25;
   SPECIAL_ARRAY = [];
   UNIQUE_VALUES = [];
 
-  constructor(ladders, chutes) {
+  constructor(ladders, chutes, board) {
     this.ladders = ladders;
     this.chutes = chutes;
+    this.board = board;
   }
 
   verifyUniqueValue = (array, value) => {
@@ -31,7 +33,7 @@ export class Game {
   };
 
   endMax = (type, start) => {
-    return type === SpaceType.LADDER ? this.TOTAL - 1 : start - this.COLUMNS;
+    return type === SpaceType.LADDER ? this.FINISH - 1 : start - this.COLUMNS;
   };
 
   createSpecialSpaces = (startMin, startMax, type, total) => {
@@ -60,23 +62,23 @@ export class Game {
   };
 
   createChutesAndLadders = () => {
-    const ladders = this.createSpecialSpaces(
+    this.SPECIAL_ARRAY.push(
+      this.spaceMaker(this.START, SpaceType.START),
+      this.spaceMaker(this.FINISH, SpaceType.FINISH)
+    );
+
+    this.createSpecialSpaces(
       2,
-      this.TOTAL - this.COLUMNS,
+      this.FINISH - this.COLUMNS,
       SpaceType.LADDER,
       this.ladders
     );
 
-    const chutes = this.createSpecialSpaces(
+    this.createSpecialSpaces(
       this.COLUMNS + 1,
-      this.TOTAL - 1,
+      this.FINISH - 1,
       SpaceType.CHUTE,
       this.chutes
     );
-
-    return ladders, chutes;
   };
 }
-// let newBoard = new Game(4, 4);
-// newBoard.createChutesAndLadders();
-// console.log(newBoard.SPECIAL_ARRAY, newBoard.UNIQUE_VALUES);
