@@ -1,4 +1,4 @@
-import { Game } from "./game.js";
+// import { Game } from "./game.js";
 import { SpaceType } from "./space.js";
 
 export class Board {
@@ -45,9 +45,9 @@ export class Board {
   }
 }
 
-let game = new Game(4, 4, 2, 2);
-game.createChutesAndLadders();
-let board = new Board(game.SPECIAL_ARRAY, game.FINISH, game.spaceMaker);
-board.createAllSpaces();
-board.connectSpaces();
-board.print();
+// let game = new Game(4, 4, 2, 2);
+// game.createChutesAndLadders();
+// let board = new Board(game.SPECIAL_ARRAY, game.FINISH, game.spaceMaker);
+// board.createAllSpaces();
+// board.connectSpaces();
+// board.print();

@@ -1,5 +1,6 @@
 import { Space, SpaceType } from "./space.js";
 import { randomNumber } from "./utils.js";
+import { Board } from "./board.js";
 
 export class Game {
   START = 1;
@@ -10,10 +11,10 @@ export class Game {
   SPECIAL_ARRAY = [];
   UNIQUE_VALUES = [];
 
-  constructor(ladders, chutes, board) {
+  constructor(ladders, chutes) {
     this.ladders = ladders;
     this.chutes = chutes;
-    this.board = board;
+    this.board = new Board(this.SPECIAL_ARRAY, this.FINISH, this.spaceMaker);
   }
 
   verifyUniqueValue = (array, value) => {
@@ -82,3 +83,9 @@ export class Game {
     );
   };
 }
+
+let game = new Game(2, 2);
+game.createChutesAndLadders();
+game.board.createAllSpaces();
+game.board.connectSpaces();
+game.board.print();
