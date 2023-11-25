@@ -48,7 +48,6 @@ export class Board {
   }
 }
 
-let chutes = new Game(4, 4, 2, 2);
-let newBoard = new Board(chutes.createBoardSpaces());
-newBoard.connectSpaces();
-newBoard.print();
+let game = new Game(4, 4, 2, 2);
+game.createChutesAndLadders();
+let board = new Board(game.SPECIAL_ARRAY, game.TOTAL);

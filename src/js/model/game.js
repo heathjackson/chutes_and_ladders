@@ -77,6 +77,6 @@ export class Game {
     return ladders, chutes;
   };
 }
-let newBoard = new Game(4, 4);
-newBoard.createChutesAndLadders();
-console.log(newBoard.SPECIAL_ARRAY, newBoard.UNIQUE_VALUES);
+// let newBoard = new Game(4, 4);
+// newBoard.createChutesAndLadders();
+// console.log(newBoard.SPECIAL_ARRAY, newBoard.UNIQUE_VALUES);
