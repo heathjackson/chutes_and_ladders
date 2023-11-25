@@ -1,44 +1,50 @@
 import { Game } from "./game.js";
+import { SpaceType } from "./space.js";
 
 export class Board {
   HEAD = null;
   TOTAL_SPACES_ARRAY = [];
-  constructor(specialArray, totalSpaces) {
+  constructor(specialArray, totalSpaces, spaceMaker) {
     this.specialArray = specialArray;
     this.totalSpaces = totalSpaces;
+    this.spaceMaker = spaceMaker;
   }
 
   createAllSpaces() {
-    for (let i = 1; i < this.totalSpaces; i++) {
-      for (let j = 0; j < this.specialArray.length; j++) {
-        if(this.specialArray[j].value )
-      }
+    for (let i = 1; i <= this.totalSpaces; i++) {
+      this.specialArray.forEach((e) => {
+        if (e.value === i) {
+          this.TOTAL_SPACES_ARRAY.push(e);
+        } else {
+          this.spaceMaker(i, SpaceType.NORMAL);
+        }
+      });
     }
   }
 
   connectSpaces() {
-    this.head = this.specialArray[0];
-    let prev = this.head;
+    this.HEAD = this.TOTAL_SPACES_ARRAY[0];
+    let prev = this.HEAD;
 
-    for (let i = 1; i < this.totalSpaces; i++) {
-      let temp = this.specialArray[i];
+    for (let i = 1; i < this.TOTAL_SPACES_ARRAY.length; i++) {
+      let temp = this.TOTAL_SPACES_ARRAY[i];
       prev.next = temp;
       prev = temp;
     }
   }
 
   print() {
-    while (this.head !== null) {
-      console.log(`value = ${this.head.value}, type = ${this.head.type}`);
-      if (this.head.special) {
-        console.log(`special = ${this.head.special.value}`);
+    while (this.HEAD !== null) {
+      console.log(`value = ${this.HEAD.value}, type = ${this.HEAD.type}`);
+      if (this.HEAD.special) {
+        console.log(`special = ${this.HEAD.special.value}`);
       }
-      this.head = this.head.next;
+      this.HEAD = this.HEAD.next;
     }
   }
 
   clear() {
-    this.head = null;
+    this.HEAD = null;
   }
 }
 
