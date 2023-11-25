@@ -27,11 +27,11 @@ export class Game {
   };
 
   endMin = (type, start) => {
-    return type === "ladder" ? start + this.COLUMNS : 2;
+    return type === SpaceType.LADDER ? start + this.COLUMNS : 2;
   };
 
   endMax = (type, start) => {
-    return type === "ladder" ? this.TOTAL - 1 : start - this.COLUMNS;
+    return type === SpaceType.LADDER ? this.TOTAL - 1 : start - this.COLUMNS;
   };
 
   createSpecialSpaces = (startMin, startMax, type, total) => {
@@ -63,14 +63,14 @@ export class Game {
     const ladders = this.createSpecialSpaces(
       2,
       this.TOTAL - this.COLUMNS,
-      "ladder",
+      SpaceType.LADDER,
       this.ladders
     );
 
     const chutes = this.createSpecialSpaces(
       this.COLUMNS + 1,
       this.TOTAL - 1,
-      "chute",
+      SpaceType.CHUTE,
       this.chutes
     );
 

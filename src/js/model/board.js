@@ -12,13 +12,12 @@ export class Board {
 
   createAllSpaces() {
     for (let i = 1; i <= this.totalSpaces; i++) {
-      this.specialArray.forEach((e) => {
-        if (e.value === i) {
-          this.TOTAL_SPACES_ARRAY.push(e);
-        } else {
-          this.spaceMaker(i, SpaceType.NORMAL);
-        }
-      });
+      let found = this.specialArray.find((e) => e.value === i);
+      if (found) {
+        this.TOTAL_SPACES_ARRAY.push(found);
+      } else {
+        this.TOTAL_SPACES_ARRAY.push(this.spaceMaker(i, SpaceType.NORMAL));
+      }
     }
   }
 
@@ -50,4 +49,7 @@ export class Board {
 
 let game = new Game(4, 4, 2, 2);
 game.createChutesAndLadders();
-let board = new Board(game.SPECIAL_ARRAY, game.TOTAL);
+let board = new Board(game.SPECIAL_ARRAY, game.TOTAL, game.spaceMaker);
+board.createAllSpaces();
+board.connectSpaces();
+board.print();
