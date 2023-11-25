@@ -1,17 +1,27 @@
 import { Game } from "./game.js";
 
 export class Board {
-  constructor(allSpacesArray) {
-    this.allSpacesArray = allSpacesArray;
-    this.head = null;
+  HEAD = null;
+  TOTAL_SPACES_ARRAY = [];
+  constructor(specialArray, totalSpaces) {
+    this.specialArray = specialArray;
+    this.totalSpaces = totalSpaces;
+  }
+
+  createAllSpaces() {
+    for (let i = 1; i < this.totalSpaces; i++) {
+      for (let j = 0; j < this.specialArray.length; j++) {
+        if(this.specialArray[j].value )
+      }
+    }
   }
 
   connectSpaces() {
-    this.head = this.allSpacesArray[0];
+    this.head = this.specialArray[0];
     let prev = this.head;
 
-    for (let i = 1; i < this.allSpacesArray.length; i++) {
-      let temp = this.allSpacesArray[i];
+    for (let i = 1; i < this.totalSpaces; i++) {
+      let temp = this.specialArray[i];
       prev.next = temp;
       prev = temp;
     }
