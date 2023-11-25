@@ -14,6 +14,7 @@ export class Game {
   constructor(ladders, chutes) {
     this.ladders = ladders;
     this.chutes = chutes;
+    this.createChutesAndLadders();
     this.board = new Board(this.SPECIAL_ARRAY, this.FINISH, this.spaceMaker);
   }
 
@@ -85,7 +86,4 @@ export class Game {
 }
 
 let game = new Game(2, 2);
-game.createChutesAndLadders();
-game.board.createAllSpaces();
-game.board.connectSpaces();
 game.board.print();

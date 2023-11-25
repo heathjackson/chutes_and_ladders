@@ -8,6 +8,7 @@ export class Board {
     this.specialArray = specialArray;
     this.totalSpaces = totalSpaces;
     this.spaceMaker = spaceMaker;
+    this.connectSpaces();
   }
 
   createAllSpaces() {
@@ -17,14 +18,16 @@ export class Board {
         ? this.TOTAL_SPACES_ARRAY.push(found)
         : this.TOTAL_SPACES_ARRAY.push(this.spaceMaker(i, SpaceType.NORMAL));
     }
+    return this.TOTAL_SPACES_ARRAY;
   }
 
   connectSpaces() {
-    this.HEAD = this.TOTAL_SPACES_ARRAY[0];
+    let totalArray = this.createAllSpaces();
+    this.HEAD = totalArray[0];
     let prev = this.HEAD;
 
-    for (let i = 1; i < this.TOTAL_SPACES_ARRAY.length; i++) {
-      let temp = this.TOTAL_SPACES_ARRAY[i];
+    for (let i = 1; i < totalArray.length; i++) {
+      let temp = totalArray[i];
       prev.next = temp;
       prev = temp;
     }
