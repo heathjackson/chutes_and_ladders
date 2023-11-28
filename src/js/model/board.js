@@ -1,56 +1,57 @@
-// import { Game } from "./game.js";
 import { SpaceType } from "./space.js";
 
 export class Board {
-  HEAD = null;
-  TOTAL_SPACES_ARRAY = [];
+  start;
+  finish;
+  total_spaces_array = [];
   constructor(specialArray, totalSpaces, spaceMaker) {
+    this.spaceMaker = spaceMaker;
     this.specialArray = specialArray;
     this.totalSpaces = totalSpaces;
-    this.spaceMaker = spaceMaker;
     this.connectSpaces();
   }
 
-  createAllSpaces() {
+  createAllSpaces = () => {
     for (let i = 1; i <= this.totalSpaces; i++) {
-      let found = this.specialArray.find((e) => e.value === i);
-      found
-        ? this.TOTAL_SPACES_ARRAY.push(found)
-        : this.TOTAL_SPACES_ARRAY.push(this.spaceMaker(i, SpaceType.NORMAL));
+      if (i === 1) {
+        this.total_spaces_array.push(this.spaceMaker(i, SpaceType.START));
+      } else if (i === this.totalSpaces) {
+        this.finish = this.spaceMaker(i, SpaceType.FINISH);
+        this.total_spaces_array.push(this.finish);
+      } else {
+        let found = this.specialArray.find((e) => e.value === i);
+        found
+          ? this.total_spaces_array.push(found)
+          : this.total_spaces_array.push(this.spaceMaker(i, SpaceType.NORMAL));
+      }
     }
-    return this.TOTAL_SPACES_ARRAY;
-  }
+    return this.total_spaces_array;
+  };
 
-  connectSpaces() {
+  connectSpaces = () => {
     let totalArray = this.createAllSpaces();
-    this.HEAD = totalArray[0];
-    let prev = this.HEAD;
+    this.start = totalArray[0];
+    let cur = this.start;
 
     for (let i = 1; i < totalArray.length; i++) {
-      let temp = totalArray[i];
-      prev.next = temp;
-      prev = temp;
+      let nextSpace = totalArray[i];
+      cur.next = nextSpace;
+      nextSpace.back = cur;
+      cur = nextSpace;
     }
-  }
+  };
 
   print() {
-    while (this.HEAD !== null) {
-      console.log(`value = ${this.HEAD.value}, type = ${this.HEAD.type}`);
-      if (this.HEAD.special) {
-        console.log(`special = ${this.HEAD.special.value}`);
+    while (this.start !== null) {
+      console.log(`value = ${this.start.value}, type = ${this.start.type}`);
+      if (this.start.special) {
+        console.log(`special = ${this.start.special.value}`);
       }
-      this.HEAD = this.HEAD.next;
+      this.start = this.start.next;
     }
   }
 
   clear() {
-    this.HEAD = null;
+    this.start = null;
   }
 }
-
-// let game = new Game(4, 4, 2, 2);
-// game.createChutesAndLadders();
-// let board = new Board(game.SPECIAL_ARRAY, game.FINISH, game.spaceMaker);
-// board.createAllSpaces();
-// board.connectSpaces();
-// board.print();
