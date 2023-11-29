@@ -17,47 +17,24 @@ export class Color {
 }
 
 export class Avatar {
-  #Winner = false;
-  #Location = null;
-  #Name = "";
-  #Color = Color.UNDEFINED;
+  winner = false;
+  location;
+  color = Color.UNDEFINED;
 
   /**
    *
-   * @param name the name of the avatar example: Car, Top Hat, Black Cat, etc
    * @param color the color of the avatar
    */
-  constructor(name, color) {
-    this.#Name = name;
-    this.#Color = color;
+  constructor(color) {
+    this.color = color;
   }
 
-  get name() {
-    return this.#Name;
-  }
-
-  get location() {
-    return this.#Location;
-  }
-
-  get color() {
-    return this.#Color;
-  }
-
-  set location(space) {
-    this.#Location = space;
-  }
-
-  get winner() {
-    return this.#Winner;
-  }
-
-  set winner(winnerStatus) {
-    this.#Winner = winnerStatus;
+  toggleWinner() {
+    this.winner = !this.winner;
   }
 
   move(numberOfSpaces) {
-    let location = this.#Location;
+    let location = this.location;
 
     //If the number of spaces rolled is a positive number, then move the avatar
     //forward that number of spaces.  If the avatar is moved to the finish space the avatar is landed.
@@ -66,7 +43,7 @@ export class Avatar {
       for (let i = 0; i < numberOfSpaces; i++) {
         if (location.type === SpaceType.FINISH) {
           this.toggleWinner();
-          console.log(`${this.name} is the winner`);
+          console.log(`${this.color} is the winner`);
           return location.land(this);
         } else {
           location = location.next;
@@ -84,11 +61,6 @@ export class Avatar {
         }
       }
     }
-
     return location.land(this);
-  }
-
-  toggleWinner() {
-    this.winner = !this.winner;
   }
 }
