@@ -3,10 +3,6 @@
 import { Avatar } from "./avatar.js";
 
 export class Player {
-  #Name = "";
-  #Order = -1;
-  #Avatar = null;
-
   /**
    * The constructor for the Player class
    *
@@ -19,22 +15,8 @@ export class Player {
    *
    */
   constructor(name, order, avatar) {
-    this.#Name = name;
-    this.#Order = order;
-    this.#Avatar = avatar;
-  }
-
-  get name() {
-    return this.#Name;
-  }
-
-  // TODO - Fill in the remaining getters
-
-  get order() {
-    return this.#Order;
-  }
-
-  get avatar() {
-    return this.#Avatar;
+    this.name = name;
+    this.order = order;
+    this.avatar = avatar;
   }
 }

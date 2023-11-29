@@ -1,6 +1,8 @@
 import { SpaceType, Space } from "./space.js";
 import { randomNumber } from "./utils.js";
 import { Board } from "./board.js";
+import { Player } from "./player.js";
+import { Avatar } from "./avatar.js";
 
 //reset function - register player - reset players - set up game
 
@@ -10,6 +12,7 @@ export class Game {
   COLUMNS = 10;
   special_array = [];
   unique_values = [];
+  registered_players = [];
 
   constructor(ladders, chutes) {
     this.ladders = ladders;
@@ -18,6 +21,10 @@ export class Game {
     this.board = new Board(this.special_array, this.TOTAL, this.spaceMaker);
   }
 
+  registerPlayer = (playerName, avatar) => {
+    if (this.registerPlayer.length === 0) {
+    }
+  };
   spaceMaker = (startValue, type) => {
     return new Space(startValue, type);
   };

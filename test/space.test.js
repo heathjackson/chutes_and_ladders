@@ -43,8 +43,8 @@ describe("#land(avatar)", () => {
     normal_2.back = start_1;
     start_1.back = null;
 
-    const Heather = new Avatar("Hat", "red");
-    const Jane = new Avatar("Car", "blue");
+    const Heather = new Avatar("red");
+    const Jane = new Avatar("blue");
 
     start_1.land(Heather);
     expect(Heather.location.value).toEqual(1);
