@@ -65,6 +65,8 @@ export class Avatar {
     if (numberOfSpaces > 0) {
       for (let i = 0; i < numberOfSpaces; i++) {
         if (location.type === SpaceType.FINISH) {
+          this.toggleWinner();
+          console.log(`${this.name} is the winner`);
           return location.land(this);
         } else {
           location = location.next;

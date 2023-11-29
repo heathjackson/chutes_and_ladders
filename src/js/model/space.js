@@ -127,21 +127,14 @@ export class Space {
     if someone is already on the space, push that person to the next space
     #Avatars array keeps track if someone is already on the space
     */
-    if (avatar.winner) {
-      return;
-    }
-
     if (this.occupied && this.#Type !== SpaceType.START) {
       this.#Avatars[0].move(1);
       this.leave();
     }
 
-    if (this.#Type === SpaceType.FINISH) {
-      avatar.location = this;
-      console.log(`${avatar.name} is the Winner Winner Chicken Dinner!`);
-      avatar.toggleWinner();
-    } else if (this.#Special !== null) {
+    if (this.#Special !== null) {
       avatar.location = this.#Special;
+      avatar.location.#Avatars.push(avatar);
     } else {
       avatar.location = this;
       this.#Avatars.push(avatar);
