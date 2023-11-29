@@ -80,5 +80,5 @@ export class Game {
   };
 }
 
-let game = new Game(5, 5);
-game.board.print();
+// let game = new Game(5, 5);
+// console.log(game.board.total_spaces_array.length);
