@@ -20,7 +20,6 @@ export class Game {
   constructor(ladders, chutes) {
     this.ladders = ladders;
     this.chutes = chutes;
-    this.createChutesAndLadders();
     this.board = new Board(this.special_array, this.TOTAL, this.spaceMaker);
     this.dice = new Die(6);
   }
@@ -51,15 +50,19 @@ export class Game {
   };
 
   registerPlayer = (playerName, color) => {
-    this.playersLessThanMax()
-      ? this.registered_players.push(
-          new Player(
-            playerName,
-            this.registered_players.length,
-            new Avatar(color)
-          )
+    if (this.playersLessThanMax() && this.colorNotChosen(color)) {
+      this.registered_players.push(
+        new Player(
+          playerName,
+          this.registered_players.length,
+          new Avatar(color)
         )
-      : console.log("too many players");
+      );
+    } else if (!this.playersLessThanMax()) {
+      console.log(`${playerName}, a max of four players are allowed`);
+    } else {
+      console.log(`${playerName}, please choose a color not already taken`);
+    }
   };
 
   spaceMaker = (startValue, type) => {
@@ -123,12 +126,26 @@ export class Game {
     );
   };
 
-  startGame = (chutes, ladders) => {
-    const createGame = this.createChutesAndLadders();
+  // game_validator = () => {
+  //   return (this.)
+  // }
+
+  startGame = () => {
+    this.createChutesAndLadders();
     this.registered_players.map((reg) => {
       reg.avatar.location = SpaceType.START;
     });
   };
 }
 
-const startGame = game.startGame(5, 5);
+const game = new Game(5, 5);
+game.registerPlayer("Heather", Color.BLUE);
+game.registerPlayer("Matt", Color.BROWN);
+game.registerPlayer("Ace", Color.RED);
+game.registerPlayer("Bob", Color.GREEN);
+game.registerPlayer("Sarah", Color.YELLOW);
+game.startGame();
+
+console.log(game.registered_players[0].avatar.location);
+console.log(game.registered_players[1].avatar.location);
+console.log(game.registered_players[4].avatar.location);
