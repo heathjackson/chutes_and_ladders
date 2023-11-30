@@ -1,7 +1,7 @@
 import { SpaceType, Space } from "../src/js/model/space";
 import { Board } from "../src/js/model/board";
 
-describe("check that the board is created correctly with the correct amount of spaces with start and finish", () => {
+describe("check that the board is created correctly with the correct amount of spaces and a start and finish", () => {
   const spaceMaker = (startValue, type) => {
     return new Space(startValue, type);
   };

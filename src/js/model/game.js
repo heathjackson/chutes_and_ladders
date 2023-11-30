@@ -2,13 +2,13 @@ import { SpaceType, Space } from "./space.js";
 import { randomNumber } from "./utils.js";
 import { Board } from "./board.js";
 import { Player } from "./player.js";
-import { Avatar } from "./avatar.js";
+import { Avatar, Color } from "./avatar.js";
 
 //reset function - register player - reset players - set up game
 
 export class Game {
   TOTAL = 100;
-  SPAN = 45;
+  SPAN = 40;
   COLUMNS = 10;
   special_array = [];
   unique_values = [];
@@ -19,12 +19,37 @@ export class Game {
     this.chutes = chutes;
     this.createChutesAndLadders();
     this.board = new Board(this.special_array, this.TOTAL, this.spaceMaker);
+    this.avatars_available = Object.keys(new Color().constructor);
   }
 
-  registerPlayer = (playerName, avatar) => {
-    if (this.registerPlayer.length === 0) {
+  playersLessThanFour = () => {
+    return this.registered_players.length < 4;
+  };
+
+  playersGreaterThanOne = () => {
+    return this.registered_players.length > 1;
+  };
+
+  removeColorIfChosen = (colorChosen) => {
+    for (let i = this.avatars_available.length - 1; i >= 0; i--) {
+      this.avatars_available[i] === colorChosen
+        ? this.avatars_available.splice(i, 1)
+        : console.log("Choose a different avatar please");
     }
   };
+
+  registerPlayer = (playerName, color) => {
+    this.playersLessThanFour()
+      ? this.registered_players.push(
+          new Player(
+            playerName,
+            this.registered_players.length,
+            new Avatar(color)
+          )
+        )
+      : console.log("too many players");
+  };
+
   spaceMaker = (startValue, type) => {
     return new Space(startValue, type);
   };
@@ -87,5 +112,4 @@ export class Game {
   };
 }
 
-// let game = new Game(5, 5);
-// console.log(game.board.total_spaces_array.length);
+let game = new Game(5, 5);
