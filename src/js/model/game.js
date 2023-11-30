@@ -3,10 +3,13 @@ import { randomNumber } from "./utils.js";
 import { Board } from "./board.js";
 import { Player } from "./player.js";
 import { Avatar, Color } from "./avatar.js";
+import { Die } from "./die.js";
 
 //reset function - register player - reset players - set up game
 
 export class Game {
+  MAX_PLAYERS = 4;
+  MIN_PLAYERS = 1;
   TOTAL = 100;
   SPAN = 40;
   COLUMNS = 10;
@@ -19,27 +22,36 @@ export class Game {
     this.chutes = chutes;
     this.createChutesAndLadders();
     this.board = new Board(this.special_array, this.TOTAL, this.spaceMaker);
-    this.avatars_available = Object.keys(new Color().constructor);
+    this.dice = new Die(6);
   }
 
-  playersLessThanFour = () => {
-    return this.registered_players.length < 4;
+  playersLessThanMax = () => {
+    return this.registered_players.length < this.MAX_PLAYERS;
   };
 
-  playersGreaterThanOne = () => {
-    return this.registered_players.length > 1;
+  playersGreaterThanMin = () => {
+    return this.registered_players.length > this.MIN_PLAYERS;
   };
 
-  removeColorIfChosen = (colorChosen) => {
-    for (let i = this.avatars_available.length - 1; i >= 0; i--) {
-      this.avatars_available[i] === colorChosen
-        ? this.avatars_available.splice(i, 1)
-        : console.log("Choose a different avatar please");
+  colorNotChosen = (color) => {
+    let colorNotChosen = true;
+    for (let i = 0; i < this.registered_players.length; i++) {
+      if (this.registered_players[i].avatar.color === color) {
+        colorNotChosen = false;
+      }
     }
+    return colorNotChosen;
+  };
+
+  printColorOptions = () => {
+    const colorOptions = Object.keys(new Color().constructor);
+    colorOptions.map((col) => {
+      console.log(col);
+    });
   };
 
   registerPlayer = (playerName, color) => {
-    this.playersLessThanFour()
+    this.playersLessThanMax()
       ? this.registered_players.push(
           new Player(
             playerName,
@@ -110,6 +122,13 @@ export class Game {
       this.chutes
     );
   };
+
+  startGame = (chutes, ladders) => {
+    const createGame = this.createChutesAndLadders();
+    this.registered_players.map((reg) => {
+      reg.avatar.location = SpaceType.START;
+    });
+  };
 }
 
-let game = new Game(5, 5);
+const startGame = game.startGame(5, 5);
