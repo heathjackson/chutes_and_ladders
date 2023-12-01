@@ -32,21 +32,6 @@ export class Game {
     );
   };
 
-  registerPlayer = (playerName, color) => {
-    if (this.registered_players.length <= this.MAX_PLAYERS) {
-      this.registered_players.push(
-        new Player(
-          playerName,
-          this.registered_players.length,
-          new Avatar(color)
-        )
-      ),
-        this.chooseColor(color);
-    } else {
-      console.log(`${playerName}, a max of four players are allowed`);
-    }
-  };
-
   spaceMaker = (startValue, type) => {
     return new Space(startValue, type);
   };
@@ -108,14 +93,45 @@ export class Game {
     );
   };
 
+  registerPlayer = (playerName, color) => {
+    this.registered_players.length <= this.MAX_PLAYERS
+      ? (this.registered_players.push(
+          new Player(
+            playerName,
+            this.registered_players.length,
+            new Avatar(color)
+          )
+        ),
+        this.chooseColor(color))
+      : console.log(`${playerName}, a max of four players are allowed`);
+  };
+
   setUpGame = () => {
-    if (this.registered_players.length >= this.MIN_PLAYERS) {
-      this.registered_players.map((reg) => {
-        this.board.start.land(reg.avatar);
-      });
-    } else {
-      console.log("you need more players");
-    }
+    this.registered_players.length >= this.MIN_PLAYERS
+      ? this.registered_players.map((reg) => {
+          this.board.start.land(reg.avatar);
+        })
+      : console.log("you need more players");
+  };
+
+  rollDice = () => {
+    return this.dice.roll();
+  };
+
+  switchTurns = () => {
+    this.registered_players.push(this.registered_players.shift());
+  };
+
+  playTurn = () => {
+    let roll = this.rollDice();
+    this.registered_players[0].avatar.move(roll);
+    this.switchTurns();
+  };
+
+  checkForWinner = () => {
+    this.registered_players.forEach((player) => {
+      player.avatar.winner === true;
+    });
   };
 
   playGame = () => {};
@@ -127,9 +143,10 @@ game.registerPlayer("Matt", Color.PURPLE);
 game.registerPlayer("Ace", Color.RED);
 game.setUpGame();
 game.board.print();
-game.registered_players[0].avatar.move(2);
+game.playTurn();
+game.checkForWinner();
 
-console.log(game.registered_players[0].avatar.location.value);
-console.log(game.registered_players[1].avatar.location.value);
-console.log(game.registered_players[2].avatar.location.value);
-console.log(game.available_avatars);
+// console.log(game.registered_players[0].avatar.location.value);
+// console.log(game.registered_players[1].avatar.location.value);
+// console.log(game.registered_players[2].avatar.location.value);
+// console.log(game.available_avatars);
