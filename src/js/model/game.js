@@ -9,14 +9,14 @@ import { Die } from "./die.js";
 
 export class Game {
   MAX_PLAYERS = 4;
-  MIN_PLAYERS = 1;
+  MIN_PLAYERS = 2;
   TOTAL = 100;
   SPAN = 40;
   COLUMNS = 10;
+  available_avatars = [Color.GREEN, Color.BLUE, Color.PURPLE, Color.RED];
   special_array = [];
   unique_values = [];
   registered_players = [];
-  // color_options = Object.keys(new Color().constructor);
 
   constructor(ladders, chutes) {
     this.ladders = ladders;
@@ -26,49 +26,22 @@ export class Game {
     this.dice = new Die(6);
   }
 
-  playersLessThanMax = () => {
-    return this.registered_players.length - 1 < this.MAX_PLAYERS;
+  chooseColor = (color) => {
+    this.available_avatars = this.available_avatars.filter(
+      (col) => col !== color
+    );
   };
 
-  // colorNotChosen = (color) => {
-  //   let colorNotChosen = true;
-  //   for (let i = 0; i < this.registered_players.length; i++) {
-  //     if (this.registered_players[i].avatar.color === color) {
-  //       colorNotChosen = false;
-  //     }
-  //   }
-  //   return colorNotChosen;
-  // };
-
-  // removeColor = (color) => {
-  //   for (let key in this.color_options) {
-  //     if (key == color) {
-  //       key = null;
-  //     }
-  //   }
-  // };
-
-  // checkForColor = (color) => {
-  //   return this.color_options.hasOwnProperty(color);
-  // };
-  // this.color_options = this.color_options.filter((col) => col !== color);
-
-  // printColorOptions = () => {
-  //   const colorOptions = Object.keys(new Color().constructor);
-  //   colorOptions.map((col) => {
-  //     console.log(col);
-  //   });
-  // };
-
   registerPlayer = (playerName, color) => {
-    if (this.playersLessThanMax()) {
+    if (this.registered_players.length <= this.MAX_PLAYERS) {
       this.registered_players.push(
         new Player(
           playerName,
           this.registered_players.length,
           new Avatar(color)
         )
-      );
+      ),
+        this.chooseColor(color);
     } else {
       console.log(`${playerName}, a max of four players are allowed`);
     }
@@ -135,14 +108,8 @@ export class Game {
     );
   };
 
-  validatePlayerTotal = () => {
-    return (
-      this.registered_players >= this.min && this.registered_players <= this.max
-    );
-  };
-
-  startGame = () => {
-    if (this.validatePlayerTotal) {
+  setUpGame = () => {
+    if (this.registered_players.length >= this.MIN_PLAYERS) {
       this.registered_players.map((reg) => {
         this.board.start.land(reg.avatar);
       });
@@ -150,18 +117,19 @@ export class Game {
       console.log("you need more players");
     }
   };
+
+  playGame = () => {};
 }
 
 let game = new Game(5, 5);
 game.registerPlayer("Heather", Color.BLUE);
-game.registerPlayer("Matt", Color.BROWN);
+game.registerPlayer("Matt", Color.PURPLE);
 game.registerPlayer("Ace", Color.RED);
-game.registerPlayer("Bob", Color.GREEN);
-game.startGame();
+game.setUpGame();
 game.board.print();
 game.registered_players[0].avatar.move(2);
 
 console.log(game.registered_players[0].avatar.location.value);
 console.log(game.registered_players[1].avatar.location.value);
 console.log(game.registered_players[2].avatar.location.value);
-console.log(game.registered_players[3].avatar.location.value);
+console.log(game.available_avatars);
