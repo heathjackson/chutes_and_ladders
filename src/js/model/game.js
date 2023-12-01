@@ -122,21 +122,19 @@ export class Game {
     this.registered_players.push(this.registered_players.shift());
   };
 
-  playTurn = () => {
-    let roll = this.rollDice();
+  playTurn = (roll) => {
     this.registered_players[0].avatar.move(roll);
     this.switchTurns();
   };
 
   checkForWinner = () => {
-    this.registered_players.forEach((player) => {
-      player.avatar.winner === true;
+    return this.registered_players.some((player) => {
+      return player.avatar.winner === true;
     });
   };
 
   playGame = () => {};
 }
-
 let game = new Game(5, 5);
 game.registerPlayer("Heather", Color.BLUE);
 game.registerPlayer("Matt", Color.PURPLE);
@@ -144,7 +142,7 @@ game.registerPlayer("Ace", Color.RED);
 game.setUpGame();
 game.board.print();
 game.playTurn();
-game.checkForWinner();
+console.log(game.checkForWinner());
 
 // console.log(game.registered_players[0].avatar.location.value);
 // console.log(game.registered_players[1].avatar.location.value);
