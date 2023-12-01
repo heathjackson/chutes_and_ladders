@@ -10,9 +10,9 @@ import { Die } from "./die.js";
 export class Game {
   MAX_PLAYERS = 4;
   MIN_PLAYERS = 2;
-  TOTAL = 100;
-  SPAN = 40;
-  COLUMNS = 10;
+  TOTAL = 16;
+  SPAN = 9;
+  COLUMNS = 4;
   available_avatars = [Color.GREEN, Color.BLUE, Color.PURPLE, Color.RED];
   special_array = [];
   unique_values = [];
@@ -110,8 +110,17 @@ export class Game {
     this.registered_players.length >= this.MIN_PLAYERS
       ? this.registered_players.map((reg) => {
           this.board.start.land(reg.avatar);
+          reg.avatar.winner = false;
         })
       : console.log("you need more players");
+  };
+
+  resetGame = () => {
+    this.special_array = [];
+    this.unique_values = [];
+    this.createChutesAndLadders();
+    this.board = new Board(this.special_array, this.TOTAL, this.spaceMaker);
+    this.setUpGame();
   };
 
   rollDice = () => {
@@ -123,8 +132,18 @@ export class Game {
   };
 
   playTurn = (roll) => {
+    console.log(`${this.registered_players[0].name} rolled a ${roll}`);
     this.registered_players[0].avatar.move(roll);
-    this.switchTurns();
+    console.log(
+      `${this.registered_players[0].name} moved to ${this.registered_players[0].avatar.location.value}`
+    );
+    if (this.checkForWinner()) {
+      console.log(`${this.registered_players[0].name} is the winner`);
+      this.resetGame();
+    } else {
+      this.switchTurns();
+    }
+    return;
   };
 
   checkForWinner = () => {
@@ -132,19 +151,25 @@ export class Game {
       return player.avatar.winner === true;
     });
   };
-
-  playGame = () => {};
 }
-let game = new Game(5, 5);
+
+let game = new Game(0, 0);
 game.registerPlayer("Heather", Color.BLUE);
 game.registerPlayer("Matt", Color.PURPLE);
 game.registerPlayer("Ace", Color.RED);
 game.setUpGame();
 game.board.print();
-game.playTurn();
-console.log(game.checkForWinner());
-
-// console.log(game.registered_players[0].avatar.location.value);
-// console.log(game.registered_players[1].avatar.location.value);
-// console.log(game.registered_players[2].avatar.location.value);
-// console.log(game.available_avatars);
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
+game.playTurn(game.rollDice());
