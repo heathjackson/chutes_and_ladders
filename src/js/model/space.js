@@ -112,8 +112,8 @@ export class Space {
    * @return boolean true if the space has players, false otherwise
    */
 
-  get occupied() {
-    return this.#Avatars.length > 0 ? true : false;
+  occupied() {
+    return this.#Avatars.length > 0;
   }
 
   /**
@@ -122,32 +122,19 @@ export class Space {
    **/
 
   land(avatar) {
-    /*
-    alllow only one player on a space, 
-    if someone is already on the space, push that person to the next space
-    #Avatars array keeps track if someone is already on the space
-    */
-    if (this.occupied && this.#Type !== SpaceType.START) {
+    if (
+      this.occupied() &&
+      this.#Type !== SpaceType.START &&
+      this.#Type !== SpaceType.FINISH
+    ) {
       this.#Avatars[0].move(1);
       this.leave();
-    }
-
-    if (this.#Special !== null) {
+    } else if (this.#Special !== null) {
       avatar.location = this.#Special;
       avatar.location.#Avatars.push(avatar);
     } else {
       avatar.location = this;
       this.#Avatars.push(avatar);
     }
-  }
-
-  /**
-   *
-   * @param validators Array<(space {Space}) => boolean> an array of functions that can validate the space.
-   * @return {boolean} true if the space is valid, false otherwise.
-   */
-  validate(validators) {
-    // TODO - Implement a method that validates the spaces state
-    return false;
   }
 }

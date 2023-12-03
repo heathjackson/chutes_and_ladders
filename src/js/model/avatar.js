@@ -34,32 +34,22 @@ export class Avatar {
   }
 
   move(numberOfSpaces) {
-    let location = this.location;
-
     //If the number of spaces rolled is a positive number, then move the avatar
     //forward that number of spaces.  If the avatar is moved to the finish space the avatar is landed.
-
-    if (numberOfSpaces > 0) {
-      for (let i = 0; i < numberOfSpaces; i++) {
-        if (location.type === SpaceType.FINISH) {
-          this.toggleWinner();
-          return location.land(this);
-        } else {
-          location = location.next;
-        }
-      }
-
-      //If the number of spaces rolled is a negative number, then move the avatar
-      //backward that number of spaces.  If the avatar is moved to the start space the avatar is landed.
-    } else {
-      for (let i = 0; i > numberOfSpaces; i--) {
-        if (location.type === SpaceType.START) {
-          return location.land(this);
-        } else {
-          location = location.back;
-        }
+    while (numberOfSpaces > 0) {
+      if (this.location.type === SpaceType.FINISH) {
+        this.toggleWinner();
+        this.location.land(this);
+        break;
+        // } else if (this.location.next === SpaceType.FINISH) {
+        //   this.location = this.location.next;
+        //   this.toggleWinner();
+        //   break;
+      } else {
+        this.location = this.location.next;
+        numberOfSpaces--;
       }
     }
-    return location.land(this);
+    this.location.land(this);
   }
 }

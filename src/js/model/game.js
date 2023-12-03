@@ -120,6 +120,7 @@ export class Game {
     this.unique_values = [];
     this.createChutesAndLadders();
     this.board = new Board(this.special_array, this.TOTAL, this.spaceMaker);
+    this.switchTurns();
     this.setUpGame();
   };
 
@@ -132,35 +133,29 @@ export class Game {
   };
 
   playTurn = (roll) => {
-    console.log(`${this.registered_players[0].name} rolled a ${roll}`);
-    this.registered_players[0].avatar.move(roll);
-    console.log(
-      `${this.registered_players[0].name} moved to ${this.registered_players[0].avatar.location.value}`
-    );
-    if (this.checkForWinner()) {
-      console.log(`${this.registered_players[0].name} is the winner`);
+    let player = this.registered_players[0];
+    console.log(`${player.name} rolled a ${roll}`);
+    player.avatar.move(roll);
+    console.log(`${player.name} moved to ${player.avatar.location.value}`);
+    if (this.checkForWinner(player)) {
+      console.log(`${player.name} is the winner`);
       this.resetGame();
     } else {
       this.switchTurns();
     }
-    return;
   };
 
-  checkForWinner = () => {
-    return this.registered_players.some((player) => {
-      return player.avatar.winner === true;
-    });
+  checkForWinner = (player) => {
+    return player.avatar.winner;
   };
 }
 
 let game = new Game(0, 0);
 game.registerPlayer("Heather", Color.BLUE);
 game.registerPlayer("Matt", Color.PURPLE);
-game.registerPlayer("Ace", Color.RED);
 game.setUpGame();
 game.board.print();
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
+game.playTurn(15);
 game.playTurn(game.rollDice());
 game.playTurn(game.rollDice());
 game.playTurn(game.rollDice());

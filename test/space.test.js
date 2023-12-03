@@ -66,12 +66,6 @@ describe("#land(avatar)", () => {
     expect(Heather.location.value).toEqual(2);
     expect(Jane.location.value).toEqual(6);
 
-    Jane.move(-3);
-    expect(Jane.location.value).toEqual(3);
-
-    Heather.move(-10);
-    expect(Heather.location.value).toEqual(1);
-
     Heather.move(100);
     expect(Heather.location.value).toEqual(7);
   });
