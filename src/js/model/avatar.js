@@ -36,19 +36,9 @@ export class Avatar {
   move(numberOfSpaces) {
     //If the number of spaces rolled is a positive number, then move the avatar
     //forward that number of spaces.  If the avatar is moved to the finish space the avatar is landed.
-    while (numberOfSpaces > 0) {
-      if (this.location.type === SpaceType.FINISH) {
-        this.toggleWinner();
-        this.location.land(this);
-        break;
-        // } else if (this.location.next === SpaceType.FINISH) {
-        //   this.location = this.location.next;
-        //   this.toggleWinner();
-        //   break;
-      } else {
-        this.location = this.location.next;
-        numberOfSpaces--;
-      }
+    while (numberOfSpaces > 0 && this.location.type !== SpaceType.FINISH) {
+      this.location = this.location.next;
+      numberOfSpaces--;
     }
     this.location.land(this);
   }

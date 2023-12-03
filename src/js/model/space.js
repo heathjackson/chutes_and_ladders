@@ -122,16 +122,15 @@ export class Space {
    **/
 
   land(avatar) {
-    if (
-      this.occupied() &&
-      this.#Type !== SpaceType.START &&
-      this.#Type !== SpaceType.FINISH
-    ) {
+    if (this.occupied() && this.#Type !== SpaceType.START) {
       this.#Avatars[0].move(1);
       this.leave();
     } else if (this.#Special !== null) {
       avatar.location = this.#Special;
       avatar.location.#Avatars.push(avatar);
+    } else if (this.#Type === SpaceType.FINISH) {
+      avatar.location = this;
+      avatar.toggleWinner();
     } else {
       avatar.location = this;
       this.#Avatars.push(avatar);
