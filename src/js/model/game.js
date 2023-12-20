@@ -94,7 +94,7 @@ export class Game {
   };
 
   registerPlayer = (playerName, color) => {
-    this.registered_players.length <= this.MAX_PLAYERS
+    this.registered_players.length < this.MAX_PLAYERS
       ? (this.registered_players.push(
           new Player(
             playerName,

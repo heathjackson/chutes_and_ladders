@@ -53,9 +53,17 @@ describe("#registerPlayer", () => {
   });
 
   describe("test the registerPlayer function as a whole", () => {
-    const game = new Game(5, 5);
-    game.registerPlayer("Heather", Color.BLUE);
-    game.registerPlayer("Matt", Color.GREEN);
+    let game;
+
+    beforeEach(() => {
+      game = new Game(5, 5);
+      game.registerPlayer("Heather", Color.BLUE);
+      game.registerPlayer("Matt", Color.GREEN);
+    });
+
+    test("should create a game instance", () => {
+      expect(game).toBeInstanceOf(Game);
+    });
 
     test("verify that each avatar is being created", () => {
       expect(game.registerPlayer.length).toBe(2);
@@ -63,6 +71,20 @@ describe("#registerPlayer", () => {
 
     test("avatars chosen are no longer available", () => {
       expect(game.available_avatars).toEqual([Color.PURPLE, Color.RED]);
+    });
+
+    test("should not allow more than four players to be registered", () => {
+      game.registerPlayer("London", Color.PURPLE);
+      game.registerPlayer("Brooklyn", Color.RED);
+      game.registerPlayer("Austin", Color.GREEN);
+      expect(game.registered_players).toHaveLength(4);
+    });
+
+    test("should set up the game with registered players", () => {
+      game.setUpGame();
+      game.registered_players.map((player) => {
+        expect(player.avatar.location.value).toEqual(1);
+      });
     });
   });
 });
