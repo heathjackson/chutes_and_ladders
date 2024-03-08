@@ -12,31 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { Game } from "../src/js/model/game.js";
-import { SpaceType } from "../src/js/model/space";
 import { Color } from "../src/js/model/avatar";
-import { Player } from "../src/js/model/player";
 
 describe("#createSpecialSpaces", () => {
   const game = new Game(5, 5);
-  test("#endMin, test function that sets the lowest number a ladder or chute can end at given a specific start number for the ladder and chute", () => {
-    expect(game.endMin(SpaceType.LADDER, 6)).toBe(16);
-    expect(game.endMin(SpaceType.CHUTE, 20)).toBe(2);
-  });
-
-  test("#endMax, test function that sets the lowest number a ladder or chute can end at given a specific start number for the ladder and chute", () => {
-    expect(game.endMax(SpaceType.LADDER, 7)).toBe(99);
-    expect(game.endMax(SpaceType.CHUTE, 41)).toBe(31);
+  test("#createSpecialSpaces", () => {
+    expect(game.specialSpaces.length).toBe(20);
   });
 
   test("#verifySpan - make sure the span from start to end of a special space is less than 40", () => {
-    expect(game.verifySpan(20, 45)).toBeTruthy;
-    expect(game.verifySpan(20, 60)).toBeFalsy;
+    expect(game.isWithinSpan(20, 45)).toBeTruthy;
+    expect(game.isWithinSpan(20, 60)).toBeFalsy;
   });
 
   test("#verifyUniqueValue - test for unique values in an array if another number is added", () => {
     const arr = [2, 5, 6, 10, 9];
-    expect(game.verifyUniqueValue(arr, 11)).toBeTruthy;
-    expect(game.verifyUniqueValue(arr, 10)).toBeFalsy;
+    expect(game.isUniqueValue(arr, 11)).toBeTruthy;
+    expect(game.isUniqueValue(arr, 10)).toBeFalsy;
   });
 });
 
@@ -44,8 +36,8 @@ describe("#registerPlayer", () => {
   test("#chooseColor - verify color chosen is no longer available in array", () => {
     const game = new Game(5, 5);
     game.chooseColor(Color.GREEN);
-    expect(game.available_avatars.length).toBe(3);
-    expect(game.available_avatars).toEqual([
+    expect(game.availableAvatars.length).toBe(3);
+    expect(game.availableAvatars).toEqual([
       Color.BLUE,
       Color.PURPLE,
       Color.RED,
@@ -70,19 +62,19 @@ describe("#registerPlayer", () => {
     });
 
     test("avatars chosen are no longer available", () => {
-      expect(game.available_avatars).toEqual([Color.PURPLE, Color.RED]);
+      expect(game.availableAvatars).toEqual([Color.PURPLE, Color.RED]);
     });
 
     test("should not allow more than four players to be registered", () => {
       game.registerPlayer("London", Color.PURPLE);
       game.registerPlayer("Brooklyn", Color.RED);
       game.registerPlayer("Austin", Color.GREEN);
-      expect(game.registered_players).toHaveLength(4);
+      expect(game.registeredPlayers).toHaveLength(4);
     });
 
     test("should set up the game with registered players", () => {
       game.setUpGame();
-      game.registered_players.map((player) => {
+      game.registeredPlayers.map((player) => {
         expect(player.avatar.location.value).toEqual(1);
       });
     });

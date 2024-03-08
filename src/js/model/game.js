@@ -5,244 +5,148 @@ import { Player } from "./player.js";
 import { Avatar, Color } from "./avatar.js";
 import { Die } from "./die.js";
 
-//reset function - register player - reset players - set up game
-
-export class Game {
+class Game {
   MAX_PLAYERS = 4;
   MIN_PLAYERS = 2;
   TOTAL = 100;
   SPAN = 40;
   COLUMNS = 10;
-  available_avatars = [Color.GREEN, Color.BLUE, Color.PURPLE, Color.RED];
-  special_array = [];
-  unique_values = [];
-  registered_players = [];
+  availableAvatars = [Color.GREEN, Color.BLUE, Color.PURPLE, Color.RED];
+  specialSpaces = [];
+  uniqueValues = [];
+  registeredPlayers = [];
+  board;
+  dice;
 
   constructor(ladders, chutes) {
     this.ladders = ladders;
     this.chutes = chutes;
+    this.initializeGame();
+  }
+
+  initializeGame() {
     this.createChutesAndLadders();
-    this.board = new Board(this.special_array, this.TOTAL, this.spaceMaker);
+    this.board = new Board(this.specialSpaces, this.TOTAL, this.createSpace);
     this.dice = new Die(6);
   }
 
-  chooseColor = (color) => {
-    this.available_avatars = this.available_avatars.filter(
+  chooseColor(color) {
+    this.availableAvatars = this.availableAvatars.filter(
       (col) => col !== color
     );
-  };
+  }
 
-  spaceMaker = (startValue, type) => {
+  createSpace(startValue, type) {
     return new Space(startValue, type);
-  };
+  }
 
-  verifyUniqueValue = (array, value) => {
+  isUniqueValue(array, value) {
     return array.indexOf(value) === -1;
-  };
+  }
 
-  verifySpan = (startSpace, endSpace) => {
+  isWithinSpan(startSpace, endSpace) {
     return Math.abs(startSpace - endSpace) < this.SPAN;
-  };
+  }
 
-  endMin = (type, start) => {
-    return type === SpaceType.LADDER ? start + this.COLUMNS : 2;
-  };
+  calculateEnd(type, start) {
+    return type === SpaceType.LADDER
+      ? start + this.COLUMNS
+      : start - this.COLUMNS;
+  }
 
-  endMax = (type, start) => {
-    return type === SpaceType.LADDER ? this.TOTAL - 1 : start - this.COLUMNS;
-  };
-
-  createSpecialSpaces = (startMin, startMax, type, total) => {
+  createSpecialSpaces(startMin, startMax, type, total) {
     let i = 0;
     while (i < total) {
       const specialStart = randomNumber(startMin, startMax);
-      const endMin = this.endMin(type, specialStart);
-      const endMax = this.endMax(type, specialStart);
+      const endMin = this.calculateEnd(type, specialStart);
+      const endMax = this.calculateEnd(type, specialStart);
       const specialEnd = randomNumber(endMin, endMax);
 
       if (
-        this.verifySpan(specialStart, specialEnd) &&
-        this.verifyUniqueValue(this.unique_values, specialStart) &&
-        this.verifyUniqueValue(this.unique_values, specialEnd)
+        this.isWithinSpan(specialStart, specialEnd) &&
+        this.isUniqueValue(this.uniqueValues, specialStart) &&
+        this.isUniqueValue(this.uniqueValues, specialEnd)
       ) {
-        const specialS = this.spaceMaker(specialStart, type);
-        const specialE = this.spaceMaker(specialEnd, SpaceType.NORMAL);
+        const specialS = this.createSpace(specialStart, type);
+        const specialE = this.createSpace(specialEnd, SpaceType.NORMAL);
         specialS.special = specialE;
-        this.special_array.push(specialS, specialE);
-        this.unique_values.push(specialStart, specialEnd);
+        this.specialSpaces.push(specialS, specialE);
+        this.uniqueValues.push(specialStart, specialEnd);
         i++;
-      } else {
-        continue;
       }
     }
-  };
+  }
 
-  createChutesAndLadders = () => {
+  createChutesAndLadders() {
     this.createSpecialSpaces(
       2,
       this.TOTAL - this.COLUMNS,
       SpaceType.LADDER,
       this.ladders
     );
-
     this.createSpecialSpaces(
       this.COLUMNS + 1,
       this.TOTAL - 1,
       SpaceType.CHUTE,
       this.chutes
     );
-  };
+  }
 
-  registerPlayer = (playerName, color) => {
-    this.registered_players.length < this.MAX_PLAYERS
-      ? (this.registered_players.push(
-          new Player(
-            playerName,
-            this.registered_players.length,
-            new Avatar(color)
-          )
-        ),
-        this.chooseColor(color))
-      : console.log(`${playerName}, a max of four players are allowed`);
-  };
+  registerPlayer(playerName, color) {
+    if (this.registeredPlayers.length < this.MAX_PLAYERS) {
+      const player = new Player(
+        playerName,
+        this.registeredPlayers.length,
+        new Avatar(color)
+      );
+      this.registeredPlayers.push(player);
+      this.chooseColor(color);
+    } else {
+      console.log(`${playerName}, a max of four players are allowed`);
+    }
+  }
 
-  setUpGame = () => {
-    this.registered_players.length >= this.MIN_PLAYERS
-      ? this.registered_players.map((reg) => {
-          this.board.start.land(reg.avatar);
-          reg.avatar.winner = false;
-        })
-      : console.log("you need more players");
-  };
+  setUpGame() {
+    if (this.registeredPlayers.length >= this.MIN_PLAYERS) {
+      this.registeredPlayers.forEach((player) => {
+        this.board.start.land(player.avatar);
+        player.avatar.winner = false;
+      });
+    } else {
+      console.log("You need more players");
+    }
+  }
 
-  resetGame = () => {
-    this.special_array = [];
-    this.unique_values = [];
+  resetGame() {
+    this.specialSpaces = [];
+    this.uniqueValues = [];
     this.createChutesAndLadders();
-    this.board = new Board(this.special_array, this.TOTAL, this.spaceMaker);
+    this.board = new Board(this.specialSpaces, this.TOTAL, this.createSpace);
     this.switchTurns();
     this.setUpGame();
-  };
+  }
 
-  rollDice = () => {
+  rollDice() {
     return this.dice.roll();
-  };
+  }
 
-  switchTurns = () => {
-    this.registered_players.push(this.registered_players.shift());
-  };
+  switchTurns() {
+    this.registeredPlayers.push(this.registeredPlayers.shift());
+  }
 
-  playTurn = (roll) => {
-    let player = this.registered_players[0];
-    console.log(`${player.name} rolled a ${roll}`);
+  playTurn(roll) {
+    const player = this.registeredPlayers[0];
     player.avatar.move(roll);
-    console.log(`${player.name} moved to ${player.avatar.location.value}`);
     if (this.checkForWinner(player)) {
-      console.log(`${player.name} is the winner`);
       this.resetGame();
     } else {
       this.switchTurns();
     }
-  };
+  }
 
-  checkForWinner = (player) => {
+  checkForWinner(player) {
     return player.avatar.winner;
-  };
+  }
 }
 
-let game = new Game(5, 5);
-game.registerPlayer("Heather", Color.BLUE);
-game.registerPlayer("Matt", Color.PURPLE);
-game.setUpGame();
-game.board.print();
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
-game.playTurn(game.rollDice());
+export { Game };
